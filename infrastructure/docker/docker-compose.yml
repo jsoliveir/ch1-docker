@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  proxy-gateway:
+    image: nginx:alpine
+    volumes:
+      - ../services/gateways/nginx/certs:/etc/nginx/certs
+      - ../services/gateways/nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 8080:80
+      - 8443:443
+    networks:
+      - local-network
+  api.client.subscriptions:
+    build: ../../microservices/api.client.subscriptions/
+    networks:
+      - local-network
+  api.core.subscriptions:
+    build: ../../microservices/api.core.subscriptions/
+    networks:
+      - local-network
+  api.core.mail:
+    build: ../../microservices/api.core.mail/
+    networks:
+      - local-network
+  rabbit-1: &rabbit
+    image: rabbitmq:3-management
+    hostname: rabbit-1
+    environment:
+      RABBITMQ_ERLANG_COOKIE: DSHEVCXBBETJJVJWTOWT
+    volumes:
+      - ./rabbitmq/:/var/lib/rabbitmq
+      - ../services/rabbitmq/etc/:/etc/rabbitmq/
+    networks:
+      - local-network
+  rabbit-2:
+    <<: *rabbit
+    hostname: rabbit-2
+  seq:
+    image: datalust/seq
+    environment:
+      ACCEPT_EULA: Y
+    networks:
+      - local-network
+networks:
+  local-network:
+    name: local-network
+    driver: bridge

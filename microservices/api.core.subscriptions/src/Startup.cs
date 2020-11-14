@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -26,7 +27,17 @@ namespace Api.Core.Subscriptions
         {
             services.AddControllers();
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c=>
+            {
+                var xmlFile = $"documentation.xml";
+                var xmlPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddSeq();
+            });
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

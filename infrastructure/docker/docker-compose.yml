@@ -9,19 +9,22 @@ services:
       - 8080:80
       - 8443:443
     networks:
-      - local-network
+      - services
+      - public
+      - tools
   api.client.subscriptions:
     build: ../../microservices/api.client.subscriptions/
     networks:
-      - local-network
+      - public
+      - private
   api.core.subscriptions:
     build: ../../microservices/api.core.subscriptions/
     networks:
-      - local-network
+      - private
   api.core.mail:
     build: ../../microservices/api.core.mail/
     networks:
-      - local-network
+      - private
   rabbit-1: &rabbit
     image: rabbitmq:3-management
     hostname: rabbit-1
@@ -31,7 +34,8 @@ services:
       - ./rabbitmq/:/var/lib/rabbitmq
       - ../services/rabbitmq/etc/:/etc/rabbitmq/
     networks:
-      - local-network
+      - services
+      - private
   rabbit-2:
     <<: *rabbit
     hostname: rabbit-2
@@ -44,8 +48,31 @@ services:
     volumes:
       - ./temp/seq/data:/data
     networks:
-      - local-network
+      - tools
+      - private
+  mail:
+    image: rnwood/smtp4dev:v3
+    networks:
+      - tools
+      - private
 networks:
-  local-network:
-    name: local-network
+  public:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/24
+  tools:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.0.0/24
+  services:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.200.10.0/24
+  private:
+    driver: bridge 
+    ipam:
+      config:
+        - subnet: 192.100.11.0/24  

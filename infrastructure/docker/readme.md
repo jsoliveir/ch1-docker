@@ -4,13 +4,14 @@ This solution has the propose of creating local development environment so apis 
 
 The architecture of this solution is based of the following topology:
 
-    |-> nginx-proxy                  (network:   public|tools|services)
-      |-> api-public-subscription    (network:   private|public)
+    |-> public-gateway               (network:   public)
+      |-> internal-gateway           (network:   public|private)
+        |-> api-public-subscription  (network:   private)
         |-> api-core-subscription    (network:   private)
         |-> api-core-email           (network:   private)     
-      |-> RabbitMQ manager           (network:   private|services)
-      |-> Mail server                (network:   private|tools)
-      |-> SEQ server                 (network:   private|tools)
+        |-> RabbitMQ manager         (network:   private)
+        |-> Mail server              (network:   private)
+        |-> SEQ server               (network:   private)
 
 All the components are behind an nginx proxy.
 The nginx proxy is responsible for routing the incomming requests to the public api and dashboards for the monitoring tools.
@@ -30,14 +31,9 @@ Public Subscriptions API: http://localhost:8080/api/subscriptions/swagger/
 There are 3 distinguish networks:
     * public
     * private
-    * services
-    * tools
-
+   
 The public network stands for hosting services that may have to be accessed from the outside (always thru an nginx gateway)
-The private network stands for hosting private core services that must only be accessed via an internal gateway/pi (public-subscriptions)
-The tools network stands for hosting tools like monitoring tools. Only the tools dashboards can be accessed thru the nginx gateway (via HTTP).
-The service network stands for hosting services like message queue brokers or databases servers. Only dashboards can be accessed thru the nginx gateway (via HTTP).
-
+The private network stands for hosting private core services that must only be accessed via an internal gateway
 
 # How to start it up
 

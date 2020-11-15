@@ -20,16 +20,19 @@ namespace Api.Client.Subscriptions
         public Startup(IWebHostEnvironment env)
         {
             Configuration = new ConfigurationBuilder()
-               .AddJsonFile("appsettings.json", optional: false)
-               .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+               .AddJsonFile("appsettings.json",false)
+               .AddJsonFile($"appsettings.{env.EnvironmentName}.json",true)
+               .AddEnvironmentVariables()
                .Build();
 
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfigurationRoot Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+
             services.AddControllers();
 
             services.AddSwaggerGen(c=>
@@ -40,9 +43,12 @@ namespace Api.Client.Subscriptions
             });
 
             services.AddLogging(loggingBuilder =>
-            {
-                loggingBuilder.AddSeq(Configuration.GetSection("Seq"));
+            {                
+                loggingBuilder
+                .SetMinimumLevel(Enum.Parse<LogLevel>(Configuration["Seq:MinimumLevel"]))
+                .AddSeq(Configuration["Seq:ServerUrl"]);
             });
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

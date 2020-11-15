@@ -14,8 +14,6 @@ namespace Api.Client.Subscriptions.Controllers.v1
     {
         public SubscriptionsController(ILogger<SubscriptionsController> logger)
         {
-            logger.LogInformation("OK");
         }
-
     }
 }

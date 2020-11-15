@@ -16,9 +16,12 @@ namespace Api.Core.Mail
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            Configuration = new ConfigurationBuilder()
+               .AddJsonFile("appsettings.json", optional: false)
+               .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+               .Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -36,7 +39,7 @@ namespace Api.Core.Mail
 
             services.AddLogging(loggingBuilder =>
             {
-                loggingBuilder.AddSeq();
+                loggingBuilder.AddSeq(Configuration.GetSection("Seq"));
             });
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -17,9 +17,13 @@ namespace Api.Client.Subscriptions
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            Configuration = new ConfigurationBuilder()
+               .AddJsonFile("appsettings.json", optional: false)
+               .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+               .Build();
+
         }
 
         public IConfiguration Configuration { get; }
@@ -37,7 +41,7 @@ namespace Api.Client.Subscriptions
 
             services.AddLogging(loggingBuilder =>
             {
-                loggingBuilder.AddSeq();
+                loggingBuilder.AddSeq(Configuration.GetSection("Seq"));
             });
         }
 

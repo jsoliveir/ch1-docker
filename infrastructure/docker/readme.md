@@ -1,26 +1,42 @@
-# How the it works
+# Acrhitecture
 
 This solution has the propose of creating local development environment so apis can be tested and makes the environment setup much easier.
 
-The architecture of this solution is based of the following:
+The architecture of this solution is based of the following topology:
 
-    |- nginx-proxy
-        |- api-public-subscription
-            |- api-core-subscription
-            |- rabbit-mq-cluster
-            |- api-core-email
-        |- SEQ log server
-        |- RabbitMQ manager
+    |-> nginx-proxy                  (network:   public|tools|services)
+      |-> api-public-subscription    (network:   private|public)
+        |-> api-core-subscription    (network:   private)
+        |-> api-core-email           (network:   private)     
+      |-> RabbitMQ manager           (network:   private|services)
+      |-> Mail server                (network:   private|tools)
+      |-> SEQ server                 (network:   private|tools)
 
-The docker network is behind and ngix-proxy which routes the incomming requests only thru the public api.
+All the components are behind an nginx proxy.
+The nginx proxy is responsible for routing the incomming requests to the public api and dashboards for the monitoring tools.
+The other services are able to communicate with each others however they must be placed in the same network.
+(if there is a need of testing a specific internal service, it can be done by setting a port forwading to the target service/container.
 
-If the services behind the proxy aren't exposed via "port forwarding" they can't be reached outside the network. However in the internal network they are able to communicate with each others
+Since all services are only exposed thru the nginx proxy server, here is some links to accessed the different dashboards:
 
-The different components placed behind the gateway can be accessed using the following URLs:
+RabbitMQ cluster manager: http://localhost:8080/mq
+SEQ Logging dashboards  : http://localhost:8080/seq
+Mail inbox dashboards   : http://localhost:8080/mail
+Public Subscriptions API: http://localhost:8080/api/subscriptions/swagger/
 
-http://localhost:8080/mq
-http://localhost:8080/seq
-http://localhost:8080/api/subscriptions
+
+# Networking
+
+There are 3 distinguish networks:
+    * public
+    * private
+    * services
+    * tools
+
+The public network stands for hosting services that may have to be accessed from the outside (always thru an nginx gateway)
+The private network stands for hosting private core services that must only be accessed via an internal gateway/pi (public-subscriptions)
+The tools network stands for hosting tools like monitoring tools. Only the tools dashboards can be accessed thru the nginx gateway (via HTTP).
+The service network stands for hosting services like message queue brokers or databases servers. Only dashboards can be accessed thru the nginx gateway (via HTTP).
 
 
 # How to start it up

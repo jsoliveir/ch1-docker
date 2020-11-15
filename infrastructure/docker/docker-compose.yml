@@ -41,6 +41,8 @@ services:
       ACCEPT_EULA: Y
     ports:
       - 5342:5341
+    volumes:
+      - ./temp/seq/data:/data
     networks:
       - local-network
 networks:

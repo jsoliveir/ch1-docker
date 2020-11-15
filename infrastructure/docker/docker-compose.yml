@@ -1,21 +1,25 @@
 version: "3.8"
 services:
-  proxy-gateway:
+  public-gateway:
     image: nginx:alpine
     volumes:
-      - ../services/gateways/nginx/certs:/etc/nginx/certs
-      - ../services/gateways/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ../services/gateways/public/certs:/etc/nginx/certs
+      - ../services/gateways/public/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - 8080:80
       - 8443:443
     networks:
-      - services
       - public
-      - tools
+  internal-gateway:
+    image: nginx:alpine
+    volumes:
+      - ../services/gateways/internal/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - public
+      - private
   api.client.subscriptions:
     build: ../../microservices/api.client.subscriptions/
     networks:
-      - public
       - private
   api.core.subscriptions:
     build: ../../microservices/api.core.subscriptions/
@@ -23,6 +27,12 @@ services:
       - private
   api.core.mail:
     build: ../../microservices/api.core.mail/
+    networks:
+      - private
+  rabbitmq:
+    image: nginx:alpine
+    volumes:
+      - ../services/rabbitmq/lb/nginx.conf:/etc/nginx/nginx.conf
     networks:
       - private
   rabbit-1: &rabbit
@@ -34,11 +44,10 @@ services:
       - ./rabbitmq/:/var/lib/rabbitmq
       - ../services/rabbitmq/etc/:/etc/rabbitmq/
     networks:
-      - services
       - private
   rabbit-2:
     <<: *rabbit
-    hostname: rabbit-2
+    hostname: rabbit-2 
   seq:
     image: datalust/seq
     environment:
@@ -48,12 +57,10 @@ services:
     volumes:
       - ./temp/seq/data:/data
     networks:
-      - tools
       - private
   mail:
     image: rnwood/smtp4dev:v3
     networks:
-      - tools
       - private
 networks:
   public:
@@ -61,18 +68,8 @@ networks:
     ipam:
       config:
         - subnet: 10.0.0.0/24
-  tools:
+  private:
     driver: bridge
     ipam:
       config:
         - subnet: 172.16.0.0/24
-  services:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 192.200.10.0/24
-  private:
-    driver: bridge 
-    ipam:
-      config:
-        - subnet: 192.100.11.0/24  

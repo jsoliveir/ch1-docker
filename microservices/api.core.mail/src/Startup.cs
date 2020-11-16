@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.Core.Mail.Observers;
+using Api.Core.Mail.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -23,7 +25,6 @@ namespace Api.Core.Mail
                .AddJsonFile($"appsettings.{env.EnvironmentName}.json",true)
                .AddEnvironmentVariables()
                .Build();
-
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -48,6 +49,9 @@ namespace Api.Core.Mail
                 .AddSeq(Configuration["Seq:ServerUrl"]);
             });
 
+            services.AddSingleton<IMailService, MailService>();
+
+            services.AddSingleton<IEmailReceiverObserver, EmailReceiverObserver>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -61,7 +65,7 @@ namespace Api.Core.Mail
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", this.GetType().Namespace);
+                c.SwaggerEndpoint("v1/swagger.json", this.GetType().Namespace);
             });
 
             app.UseHttpsRedirection();
@@ -74,6 +78,9 @@ namespace Api.Core.Mail
             {
                 endpoints.MapControllers();
             });
+
+            var service = app.ApplicationServices
+                .GetService<IMailService>();
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Api.Core.Subscriptions
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", this.GetType().Namespace);
+                c.SwaggerEndpoint("v1/swagger.json", this.GetType().Namespace);
             });
 
             app.UseHttpsRedirection();

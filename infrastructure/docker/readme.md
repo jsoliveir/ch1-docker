@@ -6,8 +6,8 @@ The architecture of this solution is based of the following topology:
 
     |-> public-gateway               (network:   public)
         |-> api-public-subscription  (network:   private)
-        |-> api-core-subscription    (network:   private)
-        |-> api-core-email           (network:   private)     
+            |-> api-core-subscription    (network:   private)
+            |-> api-core-email           (network:   private)     
         |-> RabbitMQ manager         (network:   private)
         |-> Mail server              (network:   private)
         |-> SEQ server               (network:   private)
@@ -46,22 +46,20 @@ then run the following commands:
 _(shell script version)_
 ```shell
     #!/bin/sh
-    docker-compose rm -f;
+    docker-compose down
     docker network prune
     docker-compose pull;
     docker-compose build;
 
     rm -f  ~/.docker/config.json || true;
     
-    docker-compose up \
-        --force-recreate \
-        --remove-orphans;
+    docker-compose up --force-recreate --remove-orphans;
 ```
 
 _(powershell version)_
 
 ```powershell
-    docker-compose rm -f
+    docker-compose down
     docker network prune
     docker-compose pull
     docker-compose build

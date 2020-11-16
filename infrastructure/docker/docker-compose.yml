@@ -6,20 +6,21 @@ services:
       - ../services/gateways/public/certs:/etc/nginx/certs
       - ../services/gateways/public/nginx.conf:/etc/nginx/nginx.conf
     ports:
-      - 8080:80
-      - 8443:443
+      - '8080:80'
+      - '8443:443'
     networks:
       - public
   internal-gateway:
     image: nginx:alpine
     volumes:
-      - ../services/gateways/internal/nginx.conf:/etc/nginx/nginx.conf
+      - ../services/gateways/tools/nginx.conf:/etc/nginx/nginx.conf
     networks:
       - public
       - private
   api.client.subscriptions:
     build: ../../microservices/api.client.subscriptions/
     networks:
+      - public
       - private
   api.core.subscriptions:
     build: ../../microservices/api.core.subscriptions/
@@ -33,6 +34,8 @@ services:
     image: nginx:alpine
     volumes:
       - ../services/rabbitmq/lb/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - '5672:5672'
     networks:
       - private
   rabbit-1: &rabbit
@@ -53,13 +56,15 @@ services:
     environment:
       ACCEPT_EULA: Y
     ports:
-      - 5342:5341
+      - '5341:5341'
     volumes:
       - ./temp/seq/data:/data
     networks:
       - private
-  mail:
+  smtp:
     image: rnwood/smtp4dev:v3
+    ports:
+      - '2525:25'
     networks:
       - private
 networks:
@@ -67,9 +72,9 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 10.0.0.0/24
+        - subnet: 172.16.0.0/24
   private:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.16.0.0/24
+        - subnet: 10.0.0.0/24

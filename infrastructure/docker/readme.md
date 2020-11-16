@@ -4,26 +4,26 @@ This solution has the propose of creating local development environment so apis 
 
 The architecture of this solution is based of the following topology:
 
-    |-> public-gateway               (network:   public)
-      |-> internal-gateway           (network:   public|private)
-        |-> api-public-subscription  (network:   private)
-        |-> api-core-subscription    (network:   private)
-        |-> api-core-email           (network:   private)     
-        |-> RabbitMQ manager         (network:   private)
-        |-> Mail server              (network:   private)
-        |-> SEQ server               (network:   private)
+    |-> public-gateway                  (network:   public)
+        |-> api.client.subscription     (network:   public|private)
+            |-> api.core.subscription   (network:   private)
+                |-> api.core.email      (network:   private)  
+        |-> internal-gateway            (network:   public|private)
+            |-> RabbitMQ manager        (network:   private)
+            |-> Mail server             (network:   private)
+            |-> SEQ server              (network:   private)
 
-All the components are behind an nginx proxy.
-The nginx proxy is responsible for routing the incomming requests to the public api and dashboards for the monitoring tools.
-The other services are able to communicate with each others however they must be placed in the same network.
+All the components are behind an nginx proxy (internal-gateway).
+The nginx proxy is responsible for routing the incomming requests to the public api and dashboards when it comes to monitoring tools.
+The other services are able to communicate with each others however they must be placed in the same network (private).
 (if there is a need of testing a specific internal service, it can be done by setting a port forwading to the target service/container.
 
 Since all services are only exposed thru the nginx proxy server, here is some links to accessed the different dashboards:
 
-RabbitMQ cluster manager: http://localhost:8080/mq
-SEQ Logging dashboards  : http://localhost:8080/seq
-Mail inbox dashboards   : http://localhost:8080/mail
-Public Subscriptions API: http://localhost:8080/api/subscriptions/swagger/
+RabbitMQ cluster manager (guest:guest): http://localhost:8080/mq
+SEQ Logging dashboards                : http://localhost:8080/seq
+Mail inbox dashboards                 : http://localhost:8080/mail
+Public Subscriptions API              : http://localhost:8080/api/subscriptions/swagger/
 
 
 # Networking
@@ -47,21 +47,22 @@ then run the following commands:
 _(shell script version)_
 ```shell
     #!/bin/sh
-    docker-compose rm -f;
+    docker system prune --all
+    docker network prune -f
     docker-compose pull;
     docker-compose build;
 
     rm -f  ~/.docker/config.json || true;
     
-    docker-compose up \
-        --force-recreate \
-        --remove-orphans;
+    docker-compose up --force-recreate --remove-orphans;
 ```
 
 _(powershell version)_
 
 ```powershell
-    docker-compose rm -f
+    docker-compose down
+    docker system prune --all
+    docker network prune -f
     docker-compose pull
     docker-compose build
 
@@ -69,9 +70,7 @@ _(powershell version)_
         -ErrorAction SilentlyContinue `
         ~/.docker/config.json 
 
-    docker-compose up `
-        --force-recreate `
-        --remove-orphans
+    docker-compose up --force-recreate --remove-orphans
 ```
 
 _(please note that rabbitmq cluster can take up to 2min to get initialized)_

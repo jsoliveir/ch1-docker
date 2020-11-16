@@ -1,19 +1,26 @@
 version: "3.8"
 services:
-  internal-gateway:
+  public-gateway:
     image: nginx:alpine
     volumes:
-      - ../services/gateways/internal/certs:/etc/nginx/certs
-      - ../services/gateways/internal/nginx.conf:/etc/nginx/nginx.conf
+      - ../services/gateways/public/certs:/etc/nginx/certs
+      - ../services/gateways/public/nginx.conf:/etc/nginx/nginx.conf
     ports:
       - '8080:80'
       - '8443:443'
     networks:
-      - internal
+      - public
+  internal-gateway:
+    image: nginx:alpine
+    volumes:
+      - ../services/gateways/tools/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - public
       - private
   api.client.subscriptions:
     build: ../../microservices/api.client.subscriptions/
     networks:
+      - public
       - private
   api.core.subscriptions:
     build: ../../microservices/api.core.subscriptions/
@@ -61,7 +68,7 @@ services:
     networks:
       - private
 networks:
-  internal:
+  public:
     driver: bridge
     ipam:
       config:

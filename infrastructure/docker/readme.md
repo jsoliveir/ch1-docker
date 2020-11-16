@@ -5,7 +5,6 @@ This solution has the propose of creating local development environment so apis 
 The architecture of this solution is based of the following topology:
 
     |-> public-gateway               (network:   public)
-      |-> internal-gateway           (network:   public|private)
         |-> api-public-subscription  (network:   private)
         |-> api-core-subscription    (network:   private)
         |-> api-core-email           (network:   private)     
@@ -48,6 +47,7 @@ _(shell script version)_
 ```shell
     #!/bin/sh
     docker-compose rm -f;
+    docker network prune
     docker-compose pull;
     docker-compose build;
 
@@ -62,6 +62,7 @@ _(powershell version)_
 
 ```powershell
     docker-compose rm -f
+    docker network prune
     docker-compose pull
     docker-compose build
 
@@ -69,9 +70,7 @@ _(powershell version)_
         -ErrorAction SilentlyContinue `
         ~/.docker/config.json 
 
-    docker-compose up `
-        --force-recreate `
-        --remove-orphans
+    docker-compose up --force-recreate --remove-orphans
 ```
 
 _(please note that rabbitmq cluster can take up to 2min to get initialized)_

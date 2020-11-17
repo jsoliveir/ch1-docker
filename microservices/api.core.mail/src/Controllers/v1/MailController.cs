@@ -7,14 +7,14 @@ using Api.Core.Mail.Observers;
 using Api.Core.Mail.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Core.Mail.Controllers
+namespace Api.Core.Mail.Controllers.v1
 {
     [ApiController]
     [Route("api/v1/[Controller]")]
-    public class MailController : Controller
+    public class MailController : Controller, IMail
     {
-        private readonly IMailService _emailService;
-        public MailController(IMailService emailService)
+        private readonly IEmailService _emailService;
+        public MailController(IEmailService emailService)
         {
             _emailService = emailService;
         }

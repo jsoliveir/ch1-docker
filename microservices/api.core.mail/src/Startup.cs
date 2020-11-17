@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.Core.Mail.Configurations;
 using Api.Core.Mail.Observers;
 using Api.Core.Mail.Services;
 using Microsoft.AspNetCore.Builder;
@@ -13,11 +14,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RabbitMQ.Client.Core.DependencyInjection;
 
 namespace Api.Core.Mail
 {
     public class Startup
     {
+        public IConfigurationRoot Configuration { get; }
+        public SmtpConfiguration SmtpConfiguration { get; }
+        public SeqConfiguration SeqConfiguration { get; }
+
+        public RabbitMQConfiguration RabbitConfiguration { get; }
+
         public Startup(IWebHostEnvironment env)
         {
             Configuration = new ConfigurationBuilder()
@@ -25,14 +33,18 @@ namespace Api.Core.Mail
                .AddJsonFile($"appsettings.{env.EnvironmentName}.json",true)
                .AddEnvironmentVariables()
                .Build();
-        }
 
-        public IConfigurationRoot Configuration { get; }
+            SmtpConfiguration = new SmtpConfiguration();
+            SeqConfiguration = new SeqConfiguration();
+            RabbitConfiguration = new RabbitMQConfiguration();
+
+            Configuration.GetSection("RabbitMQ").Bind(RabbitConfiguration);
+            Configuration.GetSection("Seq").Bind(SeqConfiguration);
+            Configuration.GetSection("Smtp").Bind(SmtpConfiguration);
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions();
-
             services.AddControllers();
 
             services.AddSwaggerGen(c=>
@@ -43,24 +55,33 @@ namespace Api.Core.Mail
             });
 
             services.AddLogging(loggingBuilder =>
-            {                
+            {
                 loggingBuilder
-                .SetMinimumLevel(Enum.Parse<LogLevel>(Configuration["Seq:MinimumLevel"]))
-                .AddSeq(Configuration["Seq:ServerUrl"]);
+                .SetMinimumLevel(SeqConfiguration.MinimumLevel)
+                .AddSeq(SeqConfiguration.ServerUrl);
             });
 
-            services.AddSingleton<IMailService, MailService>();
+            services.AddSingleton(SmtpConfiguration);
+            services.AddSingleton(SeqConfiguration);
+            services.AddSingleton(RabbitConfiguration);
 
-            services.AddSingleton<IEmailReceiverObserver, EmailReceiverObserver>();
+            services.AddSingleton<IEmailService, EmailService>();
+
+            services.AddRabbitMqConsumingClientSingleton(
+                RabbitConfiguration.Client);
+
+            services.AddConsumptionExchange(
+               exchangeName: RabbitConfiguration.ExchangeName,
+               options: RabbitConfiguration.Exchange);
+
+            services.AddAsyncMessageHandlerSingleton<MessageHandler>(
+                RabbitConfiguration.Exchange.Queues.SelectMany(q=>q.RoutingKeys));
+
+            services.AddHostedService<MessagingService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
@@ -68,19 +89,12 @@ namespace Api.Core.Mail
                 c.SwaggerEndpoint("v1/swagger.json", this.GetType().Namespace);
             });
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
-            var service = app.ApplicationServices
-                .GetService<IMailService>();
         }
     }
 }

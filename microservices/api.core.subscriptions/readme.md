@@ -1,4 +1,4 @@
-# Public API (api.core.subscriptions)
+# Private API (api.core.subscriptions)
 
 This api handles CRUD operations for the subscriptions prove of concept.
 It is a pure back-end API and it was disigned to be set up in a private network behind gateway, so it fully opened and doen't have any kind of authentication flows. Why? - For performance improvement.

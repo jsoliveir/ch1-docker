@@ -5,10 +5,8 @@ In this directory you cam see the follwing microservices:
 	- api.core.subcriptions
 	- api.mail.subscriptions
 
-
 # api.client.subscriptions
 ./api.client.subscriptions/
-
 	- It is a dotnet core API 
 	- It was designed to be publicly available.
 	- It supports security tokens authorization
@@ -16,7 +14,6 @@ In this directory you cam see the follwing microservices:
 
 # api.core.subscriptions
 ./api.core.subscriptions/
-
 	- It is a dotnet core API 
 	- It was designed to be placed in a private network and behind gateway
 	- It was designed for processing CRUD operations as fast as possible againts a database.
@@ -25,7 +22,6 @@ In this directory you cam see the follwing microservices:
 
 # api.core.mail
 ./api.core.mail/
-
 	- It is a dotnet core API 
 	- It was designed to be placed in a private network and behind gateway
 	- It was designed to be a consumer and process event messages comming from RabbitMQ.

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Api.Core.Mail.Services
 {
-    public interface IMailService
+    public interface IEmailService
     {
         Task SendMail(Email email);
     }

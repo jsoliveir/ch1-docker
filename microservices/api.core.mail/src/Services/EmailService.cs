@@ -1,4 +1,5 @@
-﻿using Api.Core.Mail.Models;
+﻿using Api.Core.Mail.Configurations;
+using Api.Core.Mail.Models;
 using Api.Core.Mail.Observers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -13,32 +14,25 @@ using System.Threading.Tasks;
 
 namespace Api.Core.Mail.Services
 {
-    public class MailService : IMailService, IEmailReceiverObservable
+    public class EmailService : IEmailService
     {
-        private readonly ILogger<IMailService> _logger;
-        private readonly IConfiguration _configurations;
+        private readonly ILogger<IEmailService> _logger;
+        private readonly SmtpConfiguration _configurations;
 
-        public MailService(
-            IConfiguration configurations,
-            IEmailReceiverObserver observers,
-            ILogger<IMailService> logger)
+        public EmailService(
+            ILogger<IEmailService> logger,
+            SmtpConfiguration configurations)
         {
             _logger = logger;
-
             _configurations = configurations;
-
-            observers.Attach(this);
         }
-
-        public void OnEmailReceived(Email email) =>
-            SendMail(email);
 
         public async Task SendMail(Email email)
         {
             try
             {
-                var server = _configurations["Smtp:Server"];
-                var port = int.Parse(_configurations["Smtp:Port"]);
+                var server = _configurations.Server;
+                var port = _configurations.Port;
                 var mailMessage = new MailMessage()
                 {
                     From = new MailAddress(email.From),
@@ -49,7 +43,7 @@ namespace Api.Core.Mail.Services
                 using (SmtpClient smtp = new SmtpClient(server, port))
                 {
                     await smtp.SendMailAsync(mailMessage);
-                    _logger.LogInformation("mail sent: {mail}", email);
+                    _logger.LogWarning("mail sent! {mail}", email);
                 }
             }
             catch (Exception ex)

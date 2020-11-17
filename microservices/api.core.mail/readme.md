@@ -46,4 +46,4 @@ Take a look at ./src/appsettings.json configuration file in order to change the 
 You can check de API documentation by browing the following address
 http://localhost:8000/swagger/index.html
 
-*Please consider that the port might be different depending on your start up settings.*
+*Please consider that the remote port might be different depending on your start up settings.*

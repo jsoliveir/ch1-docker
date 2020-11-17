@@ -1,12 +1,11 @@
 # Private API (api.core.subscriptions)
 
 This api handles CRUD operations for the subscriptions prove of concept.
-It is a pure back-end API and it was disigned to be set up in a private network behind gateway, so it fully opened and doen't have any kind of authentication flows. Why? - For performance improvement.
+It is a pure back-end API and it was disigned to be set up in a private network and behind gateway, so it fully opened and doen't have any kind of authentication flows. Why? - For performance improvement.
 
 ### Database
 
 For data storing, the API uses an In-Memory database but If there is a need of persisting the data the API is ready to be poited to an SQL server without changing any line of code (just a small startup configuration).
-
 That's possible because Microsoft Entity Framework was used ad the main ORM for database abstration.
 
 ### Email sending
@@ -31,11 +30,11 @@ If you have dotnet core SDK 3.1 installed you can just start up the API by runni
 
 If you don't make sure you have the docker installed and run the following commmands:
 ```shell
-	docker build . -t api.client.subscriptions
-	docker run api.client.subscriptions -p 8000:8080
+	docker build . -t api.core.subscriptions
+	docker run api.core.subscriptions -p 8000:8080
 ```
 The project is set to run on port 5002 by default
-you can change the default port in Properties/lauchSettings.json
+you can change the default port in Properties/launchSettings.json
 
 however if you start the API using docker, the API will run on port 8080.
 
@@ -55,4 +54,4 @@ Take a look at ./src/appsettings.json configuration file in order to change the 
 You can check de API documentation by browing the following address
 http://localhost:8000/swagger/index.html
 
-Please consider that the port might be different depending on your start up settings.
+*Please consider that the remote port might be different depending on your start up settings.*

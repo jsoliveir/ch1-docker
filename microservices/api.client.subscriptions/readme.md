@@ -21,7 +21,7 @@ If you don't make sure you have the docker installed and run the following commm
 	docker run api.client.subscriptions -p 8000:8080
 ```
 The project is set to run on port 5002 by default
-you can change the default port in Properties/lauchSettings.json
+you can change the default port in Properties/launchSettings.json
 
 however if you start the API using docker, the API will run on port 8080.
 
@@ -31,7 +31,7 @@ however if you start the API using docker, the API will run on port 8080.
 You can check de API documentation by browing the following address
 http://localhost:8000/swagger/index.html
 
-Please consider that the port might be different depending on your start up settings.
+Please consider that the remote port might be different depending on your start up settings.
 
 # Authentication
 

@@ -51,7 +51,7 @@ services:
     environment:
       RABBITMQ_ERLANG_COOKIE: DSHEVCXBBETJJVJWTOWT
     volumes:
-      - ./rabbitmq/:/var/lib/rabbitmq
+      - ./temp/rabbitmq/:/var/lib/rabbitmq
       - ../services/rabbitmq/etc/:/etc/rabbitmq/
     networks:
       - private

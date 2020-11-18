@@ -2,126 +2,154 @@
 
 This repository contains infrastructure configurations and services in order to simulate a simple subscriptions system.
 
+
 # What is in this repository
 
 
-	infrastructure/			| contains all configurations needed for setting up the project infrastructure
-		| docker /			| contains a docker-compose infrastructure solution for running the project locally.
-		| kubernetes /		| contains a kubernetes infrastructure solution for running the project.
-		| services/			| contains all sidecar services (log server, smtp, brokers, gateways)
-			| gateways/		| 
-				| public/	| contains configurations for set up a public gateway server 
-				| private/	| contains configurations for set up a private internal gateway server
-			| rabbitmq/		| 
-				| etc/		| contains startup configurations for RabbitMQ message broker
-				| lb/		| contains nginx configurations for load balancing rabbitMQ servers
+- **[infrastructure/](./infrastructure/)**	  
+	- **[docker/](./infrastructure/docker)**		  
+		- _docker-compose infrastructure_
+	- **[kubernetes/](./infrastructure/kubernetes)**	  
+		- _kubernetes infrastructure_
+	- **[services/](./infrastructure/services/)**		  
+		- **[gateways/](./infrastructure/services/gateways/)**	   
+			- **[public/](./infrastructure/services/gateways/public/)**  
+				- _configurations for the public gateway_ 
+			- **[private/](./infrastructure/services/gateways/private/)** 
+				- _configurations for the private internal gateway_
+		- **[rabbitmq/](./infrastructure/services/rabbitmq/)**	   
+			- **[etc/](./infrastructure/services/rabbitmq/etc/)**	  
+				- _configurations for RabbitMQ message broker_
+			- **[lb/](./infrastructure/services/rabbitmq/lb/)**	  
+				- _nginx load balancer for RabbitMQ_
+- **[microservices/](./microservices/)**	  
+	- **[api.client.subscriptions/](./microservices/api.client.subscriptions/)**	  
+		- _public subscriptions api_
+	- **[api.core.subscriptions/](./microservices/api.core.subscriptions/)**	  
+		- _private subscriptions api_
+	- **[api.core.mail/](./microservices/api.core.mail/)**	  
+		- _private email deliverer api_
 
 
 # Solution architecture topology
 
 The architecture of this project is based of the following topology:
 
-   **|-> public-gateway                  (network:	 public)**
-		|-> api.client.subscriptions     (network:   public | private)
-			|-> api.core.subscriptions   (network:   private)
-			|-> api.core.mail			 (network:   private)  
-	  **|-> private-gateway				 (network:   public | private)**
-			|-> RabbitMQ (cluster)       (network:   private)
-				|-> rabbit-1			 (network:   private)
-				|-> rabbit-2			 (network:   private)
-			|-> SMTP server              (network:   private)
-			|-> SEQ logs server          (network:   private)
+```go
+    |-> public-gateway              	- network:  public
+		|-> api.client.subscriptions    - network:  public + private
+	   	  |-> api.core.subscriptions    - network:  private
+			|-> api.core.mail		    - network:  private
+		|-> private-gateway		        - network:  public + private
+	   	  |-> RabbitMQ (cluster)        - network:  private
+		    |-> rabbit-1		        - network:  private
+		    |-> rabbit-2		        - network:  private
+	   	  |-> SMTP server             	- network:  private
+	   	  |-> SEQ logs server           - network:  private
+```
+
+
 
 # Explaining the differents components
 
+
+## Networking
+
 There are two different types of networks public and private.
 
-### Networking
-The public network :
-	- hosts public apis and applications that can must be reachable from the internet.
+**The public network**
 
-The private network:
-	- hosts core services, the private and the most critial ones so to speak.
+- hosts public apis and applications that can must be reachable from the internet. 
 
-### Services
-The public-gateway:
-	- is placed in the public network
-	- cannot reach the private services.
-	- routes incomming requests thru:
-		- the public api.client.subscriptions
-		- the private-gateway
-	- exposes internal services to the internet
-	- access control
-	- validate tokens 
-	- authenticate endpoints
-	- produce logs
+**The private network**
+- hosts core services, the private and the most critial ones so to speak.
 
-The private gateway:
-	- can reach services in the public network
-	- can reach services in the private network 
-	- increases control over security (when exposing dashboards)
-	- increases control over monitoring
-	- restricts access to the private network
-	- exposes partial private services to the public network
 
-The api.client.subscription: *more information in ./microservices/api.client.subscriptions*
-	- stands for basically handling requests for subscriptions creation
-	- can reach services in the public network
-	- can reach services in the private network 
+## Services
 
-The RabbitMQ (cluster):
-	- is an nginx load balancer
-	- is composed by two rabbitMQ servers in cluster (rabbit-1, rabbit2)
-	- only reachable inside the private network
-	- provides dashboards messages queuing
-	- provides a way of publishing new event messages
 
-The SMTP server
-	- is simple SMTP/Mail Inbox server
-	- SMTP only reachable in the private network
-	- Mail inbox reachable exposed by private/public gateways
+**[The public-gateway](./infrastructure/services/gateways/public/)**
+- is placed in the public network
+- cannot reach the private services.
+- routes incomming requests thru:
+	- the public api.client.subscriptions
+	- the private-gateway
+- exposes internal services to the internet
+- access control
+- validate tokens 
+- authenticate endpoints
+- produce logs
 
-The SEQ log server
-	- is simple tool for monotoring logs produced by the API's.'
+**[The private gateway](./infrastructure/services/gateways/private/)**
+- can reach services in the public network
+- can reach services in the private network 
+- increases control over security (when exposing dashboards)
+- increases control over monitoring
+- restricts access to the private network
+- exposes partial private services to the public network
+
+**The [api.client.subscriptions](./microservices/api.client.subscriptions/readme.md)**
+
+- stands for basically handling requests for subscriptions creation
+- can reach services in the public network
+- can reach services in the private network 
+
+**The [RabbitMQ (cluster)](./infrastructure/services/rabbitmq/lb/nginx.conf)**
+- is an nginx load balancer
+- is composed by two rabbitMQ servers in cluster (rabbit-1, rabbit2)
+- only reachable inside the private network
+- provides dashboards messages queuing
+- provides a way of publishing new event messages
+
+**The [SMTP server](https://archive.codeplex.com/?p=smtp4dev)**
+- is simple SMTP/Mail Inbox server
+- SMTP only reachable in the private network
+- Mail inbox reachable exposed by private/public gateways
+
+**The [SEQ log server](https://datalust.co/)**
+- is simple tool for monotoring logs produced by the API's.'
 
 
 # Interesting Links
 
-you will need to pass the basic gateway authentication in order to see the private links (dashboards)
 
-basic auth  credentials:
-	- username: admin
-	- password:admin
+**RabbitMQ cluster manager**
+http://localhost:8080/private/mq
+*(user: guest | pass: guest)*
 
-RabbitMQ cluster manager (guest:guest): http://localhost:8080/private/mq
-SEQ Logging dashboards                : http://localhost:8080/private/seq
-Mail inbox dashboards                 : http://localhost:8080/private/mail
-Public API						      : http://localhost:8080/public/subscriptions/swagger/
+**SEQ Logging dashboards**
+http://localhost:8080/private/seq
 
-# How to start it up the solution
+**Mail inbox dashboards**               
+http://localhost:8080/private/mail
 
-Set your console ***current working directory*** to the following repository path:
-	./infrastructure/docker
+**Public API**	
+http://localhost:8080/public/subscriptions/swagger/
+
+
+*you'll need the following credentials in order to see the private links above*
+_username: **admin**_
+_password: **admin**_
+
+
+# How to build and run
+
+**Clone the repository**
+```shell
+    git clone git@bitbucket.org:jsoliveira/iban-services-poc.git
+```
+
+**Set the current working directory**
 
 ```shell
     cd ./infrastructure/docker
 ```
 
-**Clean up you docker set up**
+**Clean up your docker set up**
 
-_(shell script version)_
 ```shell
     #!/bin/sh
-    rm -f  ~/.docker/config.json || true;
-    docker-compose down
-    docker system prune --all
-    docker network prune -f
-```
-
-_(powershell version)_
-```powershell
-    Remove-Item -ErrorAction SilentlyContinue  ~/.docker/config.json 
-
+    rm -f  ~/.docker/config.json;
     docker-compose down
     docker system prune --all
     docker network prune -f
@@ -129,21 +157,21 @@ _(powershell version)_
 
 **Start up the containers**
 
-_(shell script version)_
 ```shell
-     docker-compose up --force-recreate --remove-orphans;
-```
-_(powershell version)_
-```powershell
-    docker-compose up --force-recreate --remove-orphans
+    docker-compose up --force-recreate --remove-orphans;
 ```
 
-_(please note that rabbitmq cluster can take up to 2min to get initialized)_
+---
+### Important Note
+RabbitMQ cluster can take up to 2 minutes to get initialized
+> 
 
 
-Check if RabbitMQ is already up and running
- http://localhost:8080/mq/
+**Check if RabbitMQ is already up and running**
+[http://localhost:8080/mq/](http://localhost:8080/mq/)
 
  
-Check if the API is up and running
-http://localhost:8080/public/subscriptions/swagger/
+**Then check if the public API is also running**
+[http://localhost:8080/public/subscriptions/swagger/](http://localhost:8080/public/subscriptions/swagger/)
+
+---

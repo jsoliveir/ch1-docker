@@ -5,7 +5,6 @@ This repository contains infrastructure configurations and services in order to 
 [challange.pdf](./challange.pdf)
 
 
-
 # What is in this repository
 
 
@@ -136,6 +135,13 @@ _password: **admin**_
 
 
 # How to build and run
+
+**Make sure that you have docker installed**
+
+[https://www.docker.com/get-started](https://www.docker.com/get-started)
+
+_**optional**: if you want to download the dotnet core SDK in order to build the apis locally, you can download it from here:
+[https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download)_
 
 **Clone the repository**
 ```shell

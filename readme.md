@@ -1,6 +1,9 @@
 # Prove of concept
 
-This repository contains infrastructure configurations and services in order to simulate a simple subscriptions system.
+This repository contains infrastructure configurations and services in order to achieve solution for a subscriptions system regarding the following challange requirements
+
+[challange.pdf](./challange.pdf)
+
 
 
 # What is in this repository

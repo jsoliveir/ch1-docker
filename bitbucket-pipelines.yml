@@ -1,0 +1,96 @@
+image: 
+  name: mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
+options:
+  docker: true
+definitions:
+  docker-login: &docker-login |-
+      docker login -u jsoliveira -p ${SECRET};
+  build-client-subscriptions: &build-client-subscriptions |-
+      docker build --rm microservices/api.client.subscriptions/ \
+        --tag jsoliveira/api.client.subscriptions; 
+      docker save --output api.client.subscriptions.img \
+        jsoliveira/api.client.subscriptions;
+  build-core-subscriptions: &build-core-subscriptions |-
+      docker build --rm microservices/api.core.subscriptions/ \
+        --tag jsoliveira/api.core.subscriptions; 
+      docker save --output api.core.subscriptions.img \
+        jsoliveira/api.core.subscriptions;
+  build-core-mail: &build-core-mail |-
+      docker build --rm microservices/api.core.mail/ \
+        --tag jsoliveira/api.core.mail; 
+      docker save --output api.core.mail.img \
+        jsoliveira/api.core.mail;
+  deploy-client-subscriptions: &deploy-client-subscriptions |-
+      docker load --input api.client.subscriptions.img
+      docker push jsoliveira/api.client.subscriptions:${BITBUCKET_COMMIT};
+  deploy-core-subscriptions: &deploy-core-subscriptions |-
+      docker load --input api.core.subscriptions.img
+      docker push jsoliveira/api.core.subscriptions:${BITBUCKET_COMMIT};
+  deploy-core-mail: &deploy-core-mail |-
+      docker load --input api.core.mail.img
+      docker push jsoliveira/api.core.mail:${BITBUCKET_COMMIT};
+  unit-testing: &unit-testing |-
+    for p in $(find -iname *test*.csproj); do \
+      dotnet add $p package JUnitTestLogger || true;
+      dotnet test $p -r "./test-results/" \
+        --logger:"junit;LogFilePath=test-results/results.xml" \
+        --logger:"console;verbosity=detailed" || true; done;
+pipelines:
+  branches: 
+    '{master,develop,feature/**}':
+        - step: 
+            name: "Unit testing"
+            script: 
+              - *unit-testing
+        - parallel:
+          - step: 
+              name: "Build client.subscriptions"
+              script: 
+                - *build-client-subscriptions
+              artifacts:
+                - '*.img'
+          - step: 
+              name: "Build core.subscriptions"
+              script: 
+                - *build-core-subscriptions
+              artifacts:
+                - '*.img'
+          - step: 
+              name: "Build core.mail"
+              script: 
+                - *build-core-mail
+              artifacts:
+                - '*.img'
+        - parallel:
+          - step: 
+              name: "Deploy client.subscriptions"
+              script: 
+                - *docker-login
+                - *deploy-client-subscriptions
+              caches:
+                - docker
+          - step: 
+              name: "Deploy core.subscriptions"
+              script: 
+                - *docker-login
+                - *deploy-core-subscriptions
+              caches:
+                - docker
+          - step: 
+              name: "Deploy core.mail"
+              script: 
+                - *docker-login
+                - *deploy-core-mail
+              caches:
+                - docker
+        - step: 
+            name: "Deploy to production"
+            trigger: manual
+            script: 
+              - *docker-login
+              - *deploy-client-subscriptions
+              - *deploy-core-subscriptions
+              - *deploy-core-mail
+            caches:
+                - docker
+          

@@ -31,7 +31,6 @@ namespace Api.Client.Subscriptions
                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                .AddEnvironmentVariables()
                .Build();
-
         }
 
         public IConfigurationRoot Configuration { get; }
@@ -50,10 +49,25 @@ namespace Api.Client.Subscriptions
                 var xmlFile = $"documentation.xml";
                 var xmlPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
-
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                c.SwaggerDoc("v1",  new OpenApiInfo
                 {
-                    Description = "Api bearer Token",
+                    Title = "Subscriptions API - V1",
+                    Version = "v1",
+                    Description = "Use the following link " + 
+                        "to check incomming emails after creating a subscription:<br/>" +
+                        "http://localhost:8080/private/smtp/",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "José Oliveira",
+                        Email = "jsoliveira.dev@outlook.pt"
+                    },
+                });
+
+                c.AddSecurityDefinition("Bearer token authorization", new OpenApiSecurityScheme
+                {
+                    Description = "This API is not validating any kind of tokens.<br/>" +
+                        "The implemented auth flow is for demo porposes only.<br/> " + 
+                        "Just type any string in the authorization box.",
                     Scheme = "Bearer",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
@@ -68,7 +82,7 @@ namespace Api.Client.Subscriptions
                             Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
+                                Id = "Bearer token authorization"
                             }
                         },
                         new string[] {}

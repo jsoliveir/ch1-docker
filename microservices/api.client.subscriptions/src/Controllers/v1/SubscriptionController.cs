@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Api.Client.Subscriptions.Controllers.v1;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using Api.Core.Subscriptions.Models;
 using Api.Core.Subscriptions.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Api.Client.Subscriptions.Controllers.v1;
 
 namespace Api.Core.Subscriptions.Controllers.v1
 {
@@ -27,6 +27,10 @@ namespace Api.Core.Subscriptions.Controllers.v1
             _coreSubscriptionsService = coreSubscriptionsService;
         }
 
+        /// <summary>
+        ///Create a new subscription.
+        /// When a subscription is created a mail is sent to the give destination email address
+        ///</summary>
         [HttpPost]
         public async Task<ActionResult<Subscription>> Create(SubscriptionViewModel subscription)
         {
@@ -42,6 +46,9 @@ namespace Api.Core.Subscriptions.Controllers.v1
             }
         }
 
+        /// <summary>
+        ///Unsubscribe a email address using a subscription Id.
+        ///</summary>
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
@@ -49,6 +56,9 @@ namespace Api.Core.Subscriptions.Controllers.v1
             return Ok();
         }
 
+        /// <summary>
+        ///Retrieve a subscription already created
+        ///</summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<Subscription>> Get([FromRoute] int id)
         {
@@ -56,6 +66,9 @@ namespace Api.Core.Subscriptions.Controllers.v1
             return Ok(subscription);
         }
 
+        /// <summary>
+        ///Change a subscription consent
+        ///</summary>
         [HttpPatch("{id}")]
         public async Task<ActionResult<Subscription>> Patch([FromRoute] int id,[FromQuery] bool? consent)
         {
@@ -68,10 +81,14 @@ namespace Api.Core.Subscriptions.Controllers.v1
             return Ok(subscription);
         }
 
+         /// <summary>
+        ///Get a list of subscriptions
+        /// (demo purposes) A method like this should not be exposed
+        ///</summary>
         [HttpGet("List")]
-        public async Task<ActionResult<IEnumerable<Subscription>>> List([FromQuery] int max=10)
+        public async Task<ActionResult<IEnumerable<Subscription>>> List([FromQuery] int records=10)
         {
-            var subscriptions = await _coreSubscriptionsService.List(max);
+            var subscriptions = await _coreSubscriptionsService.List(records);
             return Ok(subscriptions);
         }
     }

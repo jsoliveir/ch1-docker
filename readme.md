@@ -170,6 +170,16 @@ _**optional**: if you want to download the dotnet core SDK in order to build the
     docker-compose up --force-recreate --remove-orphans;
 ```
 
+**optional:** You can use docker-compose to build and start single api:
+
+```shell
+	# docker-compose build <api_name>;
+    docker-compose build api.client.subscription;
+    docker-compose up --force-recreate --remove-orphans api.client.subscription;
+```
+
+_if you want to debug/start up an api using the SDK please take a look at the API documention in this repository._
+
 ---
 ### Important Note
 RabbitMQ cluster can take up to 2 minutes to get initialized

@@ -38,9 +38,8 @@ namespace Api.Core.Subscriptions.Controllers.v1
                 subscription = _subscriptionsService.CreateSubscription(subscription);
                 _mailService.Send(new Email()
                 {
-                    Subject = "Subcription Created",
-                    Body = $"Tank you for subscribe <br/> " +
-                        $"{JsonSerializer.Serialize(subscription)}",
+                    Subject = "Woohoo! You've created a subscription",
+                    Body = $"Tank you {subscription.FirstName} for subscribing the newsletter [{subscription.NewsletterId}]",
                     From = "no-reply@iban.com",
                     To = subscription.Email,
                 });
@@ -64,6 +63,14 @@ namespace Api.Core.Subscriptions.Controllers.v1
 
                 if (subscription?.Id == null)
                     return NotFound();
+
+                _mailService.Send(new Email()
+                {
+                    Subject = "Hope to see you again :'(",
+                    Body = $"We're sad to see you go :'(",
+                    From = "no-reply@iban.com",
+                    To = subscription.Email,
+                });
 
                 _subscriptionsService.DeleteSubscription(subscription);
             }

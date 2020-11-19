@@ -4,6 +4,8 @@ This repository contains infrastructure configurations and services in order to 
 
 [challenge.pdf](documentation/challenge.pdf)
 
+All the API are written in dotnet core 3.1 using C# language
+
 # What is in this repository
 
 - **[infrastructure/](infrastructure/)**	  
@@ -38,7 +40,7 @@ Please, take a look at the general documentation in this section
 The architecture for running this project is based on docker-compose and follows the schema bellow
 
 for more details you can take a look at: 
-- [infrastructure\docker\docker-compose.yml](infrastructure\docker\docker-compose.yml)
+- [infrastructure/docker/docker-compose.yml](infrastructure/docker/docker-compose.yml)
 
 ```go
 [WAN] 	|------------------------ [Docker Network] -------------------------------------|
@@ -66,17 +68,19 @@ There are two different types of networks: public and private.
 
 **The public network**
 
-- hosts public APIs and applications that need to be reachable from the internet. 
+- stands for hosting public APIs and applications that need to be reachable from the internet. 
 
 **The private network**
-- hosts core services (private or the most critical services so to speak).
+
+- stands for hosting core services (private or the most critical services so to speak).
 
 
 ## Services
 
 
 **[The public-gateway](infrastructure/services/gateways/public/)**
-- it's hosted in the public network
+- 
+it's hosted in the public network
 - it cannot reach private services.
 - it routes incomming requests thru:
 	- the public api.client.subscriptions
@@ -88,6 +92,7 @@ There are two different types of networks: public and private.
 - it produces interesting logs
 
 **[The private gateway](infrastructure/services/gateways/private/)**
+
 - it can reach services in the public network
 - it can reach services in the private network 
 - it increases control over security (when exposing internal dashboards)
@@ -102,18 +107,21 @@ There are two different types of networks: public and private.
 - it can reach services in the private network 
 
 **The [RabbitMQ (cluster)](infrastructure/services/rabbitmq/lb/nginx.conf)**
-- is an Nginx load balancer
-- is composed by two rabbitMQ servers in the cluster (rabbit-1, rabbit2)
-- it's only reachable inside the private network
+
+- it is an Nginx load balancer
+- it is composed by two rabbitMQ servers in the cluster (rabbit-1, rabbit2)
+- it is only reachable inside the private network
 - it provides dashboards with metrics about the existing message queues
 - it provides a way of publishing new event messages without needing of external tools and API's 
 
 **The [SMTP server](https://archive.codeplex.com/?p=smtp4dev)**
+
 - it is a simple SMTP/Mail Inbox server
 - the SMTP port can only be reachable in the private network
 - the Mailing box is exposed thru the private and public gateways for testing purposes
 
 **The [SEQ log server](https://datalust.co/)**
+
 - it's a simple tool for monitoring logs produced by the APIs.
 - it can produce nice dashboards to take control over what's happening the APIs
 - the dashboard service is exposed thru the private and public gateway for testing purposes
@@ -148,13 +156,13 @@ _**optional**: if you want to download the dotnet core SDK in order to build the
     docker network prune -f
 ```
 
-**Startup the containers**
+**Startup all containers**
 
 ```shell
     docker-compose up --force-recreate --remove-orphans;
 ```
 
-**optional:** You can use docker-compose to build and start up a single API:
+**Startup a single container**
 
 ```shell
 	# docker-compose build <api_name>;
@@ -162,7 +170,7 @@ _**optional**: if you want to download the dotnet core SDK in order to build the
     docker-compose up --force-recreate --remove-orphans api.client.subscription;
 ```
 
-_if you want to debug/start up an API using the SDK please take a look at the API documentation in this repository._
+_if you want to debug or startup an API using the dotnet core SDK please take a look at the existing API documentation in this repository [microservices/](microservices)_
 
 
 ---
@@ -220,8 +228,7 @@ _password: **admin**_
 
 # CI/CD Integration
 
-This repository is taking advantage of bitbucket-pipelines functionality in order to push container images to the cloud container registry 
-(docker hub was used for this demo)
+This repository is taking advantage of the bitbucket-pipelines in order to deploy the container images to the cloud (docker hub was used as the main container registry for the purpose of this demo)
 
 - [https://hub.docker.com/r/jsoliveira/api.client.subscriptions/tags](https://hub.docker.com/r/jsoliveira/api.client.subscriptions/tags)
 - [https://hub.docker.com/r/jsoliveira/api.core.subscriptions/tags](https://hub.docker.com/r/jsoliveira/api.core.subscriptions/tags)

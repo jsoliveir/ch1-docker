@@ -14,17 +14,17 @@ That's possible because Microsoft Entity Framework was used as the main ORM for 
 
 Since it was used generic DB providers and the Dependency injection pattern, the changes are resumed to small changes in the API bootstrap.
 
-<br/>
 
-**example:**
 
-> An In-Memory database implementation set like this:
+**in example:**
+
+> An In-Memory database implementation like this:
 
 ```csharp
     services.AddDbContext<SubscriptionsDb>(
         options => options.UseInMemoryDatabase());
 ```
->can be changed to ir order to use a database server:  
+>can be changed to the following implementation, in order to use a database server:  
 
 ```csharp
     services.AddDbContext<CatalogContext>(

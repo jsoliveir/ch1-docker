@@ -34,7 +34,7 @@ definitions:
         --logger:"console;verbosity=detailed" || true; done;
 pipelines:
   branches: 
-    '{master,develop,feature/**}':
+    '{master,develop}':
         - step: 
             name: "Unit testing"
             script: 

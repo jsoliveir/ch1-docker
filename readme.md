@@ -183,7 +183,6 @@ _if you want to debug/start up an api using the SDK please take a look at the AP
 ---
 ### Important Note
 RabbitMQ cluster can take up to 2 minutes to get initialized
-> 
 
 
 **Check if RabbitMQ is already up and running**
@@ -197,9 +196,10 @@ RabbitMQ cluster can take up to 2 minutes to get initialized
 
 # CI/CD Integration
 
-This repository is taking advantage of bitbucket-pipelines in order to push container images to docker hub container registry:
+This repository is taking advantage of bitbucket-pipelines in order to push container images to docker hub container registry 
+
 - [https://hub.docker.com/r/jsoliveira/api.client.subscriptions/tags](https://hub.docker.com/r/jsoliveira/api.client.subscriptions/tags)
 - [https://hub.docker.com/r/jsoliveira/api.core.subscriptions/tags](https://hub.docker.com/r/jsoliveira/api.core.subscriptions/tags)
 - [https://hub.docker.com/r/jsoliveira/api.core.mail/tags](https://hub.docker.com/r/jsoliveira/api.core.mail/tags)
 
-you can se the pipeline here [https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/](https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/)
+you can se the pipeline working here [https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/](https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/)

@@ -1,8 +1,8 @@
 # Proof of Concept
 
-This repository contains infrastructure configurations and services in order to achieve a solution for a subscriptions system regarding the following challange requirements
+This repository contains infrastructure configurations and services in order to achieve a solution for a subscriptions system regarding the following challenge requirements
 
-[challange.pdf](documentation/challange.pdf)
+[challenge.pdf](documentation/challenge.pdf)
 
 # What is in this repository
 
@@ -35,20 +35,24 @@ Please, take a look at the general documentation in this section
 
 # Solution architecture topology
 
-The architecture for running this project is based on docker-compose and follows the topology bellow
-take a look at: [infrastructure\docker\docker-compose.yml](infrastructure\docker\docker-compose.yml)
+The architecture for running this project is based on docker-compose and follows the schema bellow
+
+for more details you can take a look at: 
+- [infrastructure\docker\docker-compose.yml](infrastructure\docker\docker-compose.yml)
 
 ```go
-    |-> public-gateway              	- network:  public
-		|-> api.client.subscriptions    - network:  public + private
-	   	  |-> api.core.subscriptions    - network:  private
-			|-> api.core.mail		    - network:  private
-		|-> private-gateway		        - network:  public + private
-	   	  |-> RabbitMQ (cluster)        - network:  private
-		    |-> rabbit-1		        - network:  private
-		    |-> rabbit-2		        - network:  private
-	   	  |-> SMTP server             	- network:  private
-	   	  |-> SEQ logs server           - network:  private
+[WAN] 	|------------------------ [Docker Network] -------------------------------------|
+user -> |-> [public-gateway]              		  <-> | - network:  public				|
+		|  	||-> [api.client.subscriptions]    -| <-> | - network:  public + private	|
+		|  	|	 |-> [api.core.subscriptions]  -| <-> | - network:  private				|
+		|  	|	 |-> [api.core.mail]           -| <-> | - network:  private				|
+		|  	|--> [private-gateway]		        | <-> | - network:  public + private	|
+		|	 	 |-> [SMTP server] 	          <-| <-> | - network:  private				|
+		|     	 |-> [SEQ logs server]        <-| <-> | - network:  private				|
+		| 		 |-> [RabbitMQ (cluster)]     <-| <-> | - network:  private				|
+		|	  	     |-> [rabbit-1]	     	      <-> | - network:  private				|
+		|	  		 |-> [rabbit-2]	              <-> | - network:  private				|
+		|-------------------------------------------------------------------------------|
 ```
 
 
@@ -58,82 +62,61 @@ take a look at: [infrastructure\docker\docker-compose.yml](infrastructure\docker
 
 ## Networking
 
-There are two different types of networks public and private.
+There are two different types of networks: public and private.
 
 **The public network**
 
-- hosts public APIs and applications that can must be reachable from the internet. 
+- hosts public APIs and applications that need to be reachable from the internet. 
 
 **The private network**
-- hosts core services, the private and the most critical ones so to speak.
+- hosts core services (private or the most critical services so to speak).
 
 
 ## Services
 
 
 **[The public-gateway](infrastructure/services/gateways/public/)**
-- is placed in the public network
-- cannot reach private services.
-- routes incomming requests thru:
+- it's hosted in the public network
+- it cannot reach private services.
+- it routes incomming requests thru:
 	- the public api.client.subscriptions
 	- the private-gateway
-- exposes internal services to the internet
-- access control
-- validate tokens 
-- authenticate endpoints
-- produce logs
+- it exposes internal services to the internet
+- it takes control of what resources have been accessed
+- it authenticate internal endpoints
+- it take control over one first layer of security ( like validating auth tokens against an identity server, for instance) 
+- it produces interesting logs
 
 **[The private gateway](infrastructure/services/gateways/private/)**
-- can reach services in the public network
-- can reach services in the private network 
-- increases control over security (when exposing dashboards)
-- increases control over monitoring
-- restricts access to the private network
-- exposes partial private services to the public network
+- it can reach services in the public network
+- it can reach services in the private network 
+- it increases control over security (when exposing internal dashboards)
+- it increases control over monitoring
+- it restricts access to the private network
+- it exposes partial private services to the public network
 
 **The [api.client.subscriptions](microservices/api.client.subscriptions/readme.md)**
 
-- stands for basically handling requests for subscriptions creation
-- can reach services in the public network
-- can reach services in the private network 
+- it stands for basically handling requests for subscriptions creation
+- it can reach services in the public network
+- it can reach services in the private network 
 
 **The [RabbitMQ (cluster)](infrastructure/services/rabbitmq/lb/nginx.conf)**
 - is an Nginx load balancer
 - is composed by two rabbitMQ servers in the cluster (rabbit-1, rabbit2)
-- only reachable inside the private network
-- provides dashboards messages queuing
-- provides a way of publishing new event messages
+- it's only reachable inside the private network
+- it provides dashboards with metrics about the existing message queues
+- it provides a way of publishing new event messages without needing of external tools and API's 
 
 **The [SMTP server](https://archive.codeplex.com/?p=smtp4dev)**
-- is a simple SMTP/Mail Inbox server
-- SMTP only reachable in the private network
-- Mail inbox reachable exposed by private/public gateways
+- it is a simple SMTP/Mail Inbox server
+- the SMTP port can only be reachable in the private network
+- the Mailing box is exposed thru the private and public gateways for testing purposes
 
 **The [SEQ log server](https://datalust.co/)**
-- is a simple tool for monitoring logs produced by the APIs.
-
-
-# Interesting Links
-
-
-**RabbitMQ cluster manager**
-http://localhost:8080/private/mq
-*(user: guest | pass: guest)*
-
-**SEQ Logging dashboards**
-http://localhost:8080/private/seq
-
-**Mail inbox dashboards**               
-http://localhost:8080/private/mail
-
-**Public API**	
-http://localhost:8080/public/subscriptions/swagger/
-
-
-*you'll need the following credentials in order to see the private links above*
-_username: **admin**_
-_password: **admin**_
-
+- it's a simple tool for monitoring logs produced by the APIs.
+- it can produce nice dashboards to take control over what's happening the APIs
+- the dashboard service is exposed thru the private and public gateway for testing purposes
 
 # How to build and run
 
@@ -181,31 +164,76 @@ _**optional**: if you want to download the dotnet core SDK in order to build the
 
 _if you want to debug/start up an API using the SDK please take a look at the API documentation in this repository._
 
+
 ---
-### Important Note
-RabbitMQ cluster can take up to 2 minutes to get initialized
+# Important Notes
 
+RabbitMQ cluster can take up to **2 minutes** to get up and running (clustering)
 
-**Check if RabbitMQ is already up and running**
-[http://localhost:8080/mq/](http://localhost:8080/mq/)
+While it is initializing, if core.subscription API gets requested it will not responding until it reaches the MQ cluster 
+
+Check the following documentation for more details: **[api.core.subscriptions/](microservices/api.core.subscriptions/)**	
+
+**How to make sure that RabbitMQ is already up and running**
+
+Try to reach the RabbitMQ management portal, if you don't get a warning message then you're good to go.
+
+[http://localhost:8080/private/mq/](http://localhost:8080/private/mq/)
 
  
-**Then check if the public API is also running**
+**How to check if the public API is also running**
+
+If you see the OpenAPI documentation in the following link then it's all set.
+
 [http://localhost:8080/public/subscriptions/swagger/](http://localhost:8080/public/subscriptions/swagger/)
 
 ---
 
+# Interesting Links
+
+
+**RabbitMQ cluster manager**
+
+[http://localhost:8080/private/mq/](http://localhost:8080/private/mq/)
+>_credentials : user: guest | pass: guest_
+
+**SEQ Logging dashboards**
+
+[http://localhost:8080/private/seq/](http://localhost:8080/private/seq/)
+
+**Mail inbox dashboards**       
+
+[http://localhost:8080/private/smtp/](http://localhost:8080/private/smtp/)
+
+**Public API Swagger**	
+
+[http://localhost:8080/public/subscriptions/swagger/](http://localhost:8080/public/subscriptions/swagger/)
+> _authentication token: any string_
+
+
+
+*you'll need the following credentials in order to get authorized by the public gateway to access the private links above*
+
+_username: **admin**_
+
+_password: **admin**_
+
 # CI/CD Integration
 
-This repository is taking advantage of bitbucket-pipelines in order to push container images to docker hub container registry 
+This repository is taking advantage of bitbucket-pipelines functionality in order to push container images to the cloud container registry 
+(docker hub was used for this demo)
 
 - [https://hub.docker.com/r/jsoliveira/api.client.subscriptions/tags](https://hub.docker.com/r/jsoliveira/api.client.subscriptions/tags)
 - [https://hub.docker.com/r/jsoliveira/api.core.subscriptions/tags](https://hub.docker.com/r/jsoliveira/api.core.subscriptions/tags)
 - [https://hub.docker.com/r/jsoliveira/api.core.mail/tags](https://hub.docker.com/r/jsoliveira/api.core.mail/tags)
 
-you can see the pipeline working here [https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/](https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/)
+you can see the CI/CD bitbucket pipelines working here [https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/](https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/)
 
 
-# Basic Cloud Architecture
+# Cloud architecture proposal (tiny version)
+
+The following drawing is tiny CI/CD architecture to deploy this solution into a Kubernetes cluster
+
+It was designed to be simple and cloud-provider agnostic
 
 ![architecture](documentation/architecture.png)

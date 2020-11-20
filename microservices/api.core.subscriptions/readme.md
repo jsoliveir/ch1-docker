@@ -18,7 +18,7 @@ Since it was used generic DB providers and the Dependency injection pattern, the
 
 **in example:**
 
-> An In-Memory database implementation like this:
+> Given an In-Memory database implementation like this:
 
 ```csharp
     services.AddDbContext<SubscriptionsDb>(

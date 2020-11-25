@@ -11,29 +11,49 @@ stages:
 - stage: Build
   displayName: Build image
   jobs:  
-  - job: Build
-    displayName: Build
+  - job: build_client_subscriptions
+    displayName: Build api.client.subscriptions
     pool:
       vmImage: 'ubuntu-latest'
     steps:
     - task: Docker@2
-      displayName: Build api.client.subscriptions
+      displayName: Docker build & push
       inputs:
-        command: build
+        command: buildAndPush
+        containerRegistry: 'Docker Hub (jsoliveira)'
+        repository: 'api.client.subscriptions'
         dockerfile: '$(Build.SourcesDirectory)/microservices/api.client.subscriptions/Dockerfile'
         tags: |
           $(tag)
+
+  - job: build_api_core_subscriptions
+    displayName: Build api.core.subscriptions
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
     - task: Docker@2
       displayName: Build api.core.subscriptions
       inputs:
-        command: build
+        command: buildAndPush
+        containerRegistry: 'Docker Hub (jsoliveira)'
+        repository: 'api.core.subscriptions'
         dockerfile: '$(Build.SourcesDirectory)/microservices/api.core.subscriptions/Dockerfile'
         tags: |
           $(tag)
+
+  - job: build_api_core_mail
+    displayName: Build api.core.mail
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
     - task: Docker@2
       displayName: Build api.core.mail
       inputs:
-        command: build
+        command: buildAndPush
+        repository: 'api.core.mail'
+        containerRegistry: 'Docker Hub (jsoliveira)'
         dockerfile: '$(Build.SourcesDirectory)/microservices/api.core.mail/Dockerfile'
         tags: |
           $(tag)
+
+  

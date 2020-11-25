@@ -21,7 +21,7 @@ stages:
       inputs:
         command: buildAndPush
         containerRegistry: 'Docker Hub (jsoliveira)'
-        repository: 'api.client.subscriptions'
+        repository: 'jsoliveira/api.client.subscriptions'
         dockerfile: '$(Build.SourcesDirectory)/microservices/api.client.subscriptions/Dockerfile'
         tags: |
           $(tag)
@@ -36,7 +36,7 @@ stages:
       inputs:
         command: buildAndPush
         containerRegistry: 'Docker Hub (jsoliveira)'
-        repository: 'api.core.subscriptions'
+        repository: 'jsoliveira/api.core.subscriptions'
         dockerfile: '$(Build.SourcesDirectory)/microservices/api.core.subscriptions/Dockerfile'
         tags: |
           $(tag)
@@ -50,7 +50,7 @@ stages:
       displayName: Build api.core.mail
       inputs:
         command: buildAndPush
-        repository: 'api.core.mail'
+        repository: 'jsoliveira/api.core.mail'
         containerRegistry: 'Docker Hub (jsoliveira)'
         dockerfile: '$(Build.SourcesDirectory)/microservices/api.core.mail/Dockerfile'
         tags: |

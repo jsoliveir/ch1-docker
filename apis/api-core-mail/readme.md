@@ -1,4 +1,4 @@
-# Private API (api.core.mail)
+# Private API (api-core-mail)
 
 This API is basically a consumer of a RabbitMQ message broker and it stands for email processing.
 
@@ -27,13 +27,13 @@ This API relies on **SMTP** server for sending email messages
 
 If you have dotnet core SDK 3.1 installed you can just start the API by running the following command:
 ```shell
-dotnet run --project src/api.core.subscriptions.csproj
+dotnet run --project src/api-core-subscriptions.csproj
 ```
 
 If you want to use docker instead, make sure you have it installed and run the following commands
 ```shell
-docker build . -t api.core.subscriptions
-docker run api.core.subscriptions -p 8000:8080
+docker build . -t api-core-subscriptions
+docker run api-core-subscriptions -p 8000:8080
 ```
 
 The project is set to run on port 5002 by default and it be changed [Properties/launchSettings.json](Properties/launchSettings.json) 
@@ -51,7 +51,7 @@ Please consider that the remote port might be different depending on your startu
 
 >The port 8080 is used when the API runs inside docker containers.
 
->Check the ASPNETCORE_URL environment variable inside the dockerfile and the docker port mappings before you go (docker run api.core.subscriptions -p 8000:8080)
+>Check the ASPNETCORE_URL environment variable inside the dockerfile and the docker port mappings before you go (docker run api-core-subscriptions -p 8000:8080)
 
 [http://localhost:8000/swagger/](http://localhost:8000/swagger/)
 

@@ -1,4 +1,4 @@
-# Public API (api.client.subscriptions)
+# Public API (api-client-subscriptions)
 
 This API handles public requests for subscriptions Proof of Concept
 
@@ -8,19 +8,19 @@ The API supports tokens for authentication/authorization, however for complexity
 
 # Service Dependencies
 
-This API depends on	api.core.subscriptions to run properly
+This API depends on	api-core-subscriptions to run properly
 
 # How to start it up (StandAlone)
 
 If you have dotnet core SDK 3.1 installed you can just start up the API by running the following command:
 ```shell
-dotnet run --project ./src/api.client.subscriptions.csproj
+dotnet run --project ./src/api-client-subscriptions.csproj
 ```
 
 If you don't make sure you have the docker installed and run the following commands:
 ```shell
-docker build . -t api.client.subscriptions
-docker run api.client.subscriptions -p 8000:8080
+docker build . -t api-client-subscriptions
+docker run api-client-subscriptions -p 8000:8080
 ```
 The project is configured to run on port 5002 by default but it can changed in [./src/Properties/launchSettings.json](./src/Properties/launchSettings.json).
 

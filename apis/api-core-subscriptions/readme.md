@@ -1,4 +1,4 @@
-# Private API (api.core.subscriptions)
+# Private API (api-core-subscriptions)
 
 This API performs CRUD operations for the subscription's proof of concept.
 
@@ -32,7 +32,7 @@ Since it was used generic DB providers and the Dependency injection pattern, the
             Configuration.GetConnectionString("DefaultConnection")));
 ```
 
-https://bitbucket.org/jsoliveira/iban-services-poc/src/8030495d8d3cb28e2d83875e272b14caf67c2940/apis/api.core.subscriptions/src/Startup.cs#lines-70
+https://bitbucket.org/jsoliveira/iban-services-poc/src/8030495d8d3cb28e2d83875e272b14caf67c2940/apis/api-core-subscriptions/src/Startup.cs#lines-70
 
 
 <br/>
@@ -55,13 +55,13 @@ This API relies only on **rabbitMQ** server for event sending.
 
 If you have dotnet core SDK 3.1 installed you can just start the API by running the following command:
 ```shell
-dotnet run --project src/api.core.subscriptions.csproj
+dotnet run --project src/api-core-subscriptions.csproj
 ```
 
 If you want to use docker instead, make sure you have it installed and run the following commands
 ```shell
-docker build . -t api.core.subscriptions
-docker run api.core.subscriptions -p 8000:8080
+docker build . -t api-core-subscriptions
+docker run api-core-subscriptions -p 8000:8080
 ```
 
 The project is set to run on port 5002 by default and it be changed [Properties/launchSettings.json](Properties/launchSettings.json) 
@@ -79,7 +79,7 @@ Please consider that the remote port might be different depending on your startu
 
 >The port 8080 is used when the API runs inside docker containers.
 
->Check the ASPNETCORE_URL environment variable inside the dockerfile and the docker port mappings before you go (docker run api.core.subscriptions -p 8000:8080)
+>Check the ASPNETCORE_URL environment variable inside the dockerfile and the docker port mappings before you go (docker run api-core-subscriptions -p 8000:8080)
 
 [http://localhost:8000/swagger/](http://localhost:8000/swagger/)
 

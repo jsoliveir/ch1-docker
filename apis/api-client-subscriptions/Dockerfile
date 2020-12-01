@@ -37,4 +37,4 @@ WORKDIR /app
 EXPOSE 8080
 USER appuser
 ENV ASPNETCORE_URLS http://*:8080
-ENTRYPOINT [ "dotnet","api.client.subscriptions.dll"]
+ENTRYPOINT [ "dotnet","api-client-subscriptions.dll"]

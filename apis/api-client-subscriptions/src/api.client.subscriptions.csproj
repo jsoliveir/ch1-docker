@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Api.Client.Subscriptions</RootNamespace>
-    <AssemblyName>api.client.subscriptions</AssemblyName>
+    <AssemblyName>api-client-subscriptions</AssemblyName>
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
 

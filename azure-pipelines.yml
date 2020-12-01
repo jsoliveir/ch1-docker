@@ -12,7 +12,7 @@ stages:
   displayName: Build image
   jobs:  
   - job: build_client_subscriptions
-    displayName: Build api.client.subscriptions
+    displayName: Build api-client-subscriptions
     pool:
       vmImage: 'ubuntu-latest'
     steps:
@@ -21,38 +21,38 @@ stages:
       inputs:
         command: buildAndPush
         containerRegistry: 'Docker Hub (jsoliveira)'
-        repository: 'jsoliveira/api.client.subscriptions'
-        dockerfile: '$(Build.SourcesDirectory)/apis/api.client.subscriptions/Dockerfile'
+        repository: 'jsoliveira/api-client-subscriptions'
+        dockerfile: '$(Build.SourcesDirectory)/apis/api-client-subscriptions/Dockerfile'
         tags: |
           $(tag)
 
-  - job: build_api_core_subscriptions
-    displayName: Build api.core.subscriptions
+  - job: build_api-core-subscriptions
+    displayName: Build api-core-subscriptions
     pool:
       vmImage: 'ubuntu-latest'
     steps:
     - task: Docker@2
-      displayName: Build api.core.subscriptions
+      displayName: Build api-core-subscriptions
       inputs:
         command: buildAndPush
         containerRegistry: 'Docker Hub (jsoliveira)'
-        repository: 'jsoliveira/api.core.subscriptions'
-        dockerfile: '$(Build.SourcesDirectory)/apis/api.core.subscriptions/Dockerfile'
+        repository: 'jsoliveira/api-core-subscriptions'
+        dockerfile: '$(Build.SourcesDirectory)/apis/api-core-subscriptions/Dockerfile'
         tags: |
           $(tag)
 
-  - job: build_api_core_mail
-    displayName: Build api.core.mail
+  - job: build_api-core-mail
+    displayName: Build api-core-mail
     pool:
       vmImage: 'ubuntu-latest'
     steps:
     - task: Docker@2
-      displayName: Build api.core.mail
+      displayName: Build api-core-mail
       inputs:
         command: buildAndPush
-        repository: 'jsoliveira/api.core.mail'
+        repository: 'jsoliveira/api-core-mail'
         containerRegistry: 'Docker Hub (jsoliveira)'
-        dockerfile: '$(Build.SourcesDirectory)/apis/api.core.mail/Dockerfile'
+        dockerfile: '$(Build.SourcesDirectory)/apis/api-core-mail/Dockerfile'
         tags: |
           $(tag)
   - job: build_public_gateway

@@ -6,14 +6,14 @@ definitions:
   docker-login: &docker-login |-
       docker login -u jsoliveira -p ${SECRET};
   build-client-subscriptions: &build-client-subscriptions |-
-      docker build --rm apis/api.client.subscriptions/ --tag jsoliveira/api.client.subscriptions; 
-      docker save --output api.client.subscriptions.img jsoliveira/api.client.subscriptions;
+      docker build --rm apis/api-client-subscriptions/ --tag jsoliveira/api-client-subscriptions; 
+      docker save --output api-client-subscriptions.img jsoliveira/api-client-subscriptions;
   build-core-subscriptions: &build-core-subscriptions |-
-      docker build --rm apis/api.core.subscriptions/ --tag jsoliveira/api.core.subscriptions; 
-      docker save --output api.core.subscriptions.img jsoliveira/api.core.subscriptions;
+      docker build --rm apis/api-core-subscriptions/ --tag jsoliveira/api-core-subscriptions; 
+      docker save --output api-core-subscriptions.img jsoliveira/api-core-subscriptions;
   build-core-mail: &build-core-mail |-
-      docker build --rm apis/api.core.mail --tag jsoliveira/api.core.mail; 
-      docker save --output api.core.mail.img jsoliveira/api.core.mail;
+      docker build --rm apis/api-core-mail --tag jsoliveira/api-core-mail; 
+      docker save --output api-core-mail.img jsoliveira/api-core-mail;
   build-public-gateway: &build-public-gateway |-
       docker build --rm services/gateways/public --tag jsoliveira/public-gateway; 
       docker save --output public-gateway.img jsoliveira/public-gateway;
@@ -21,17 +21,17 @@ definitions:
       docker build --rm services/gateways/private --tag jsoliveira/private-gateway; 
       docker save --output private-gateway.img jsoliveira/private-gateway;
   deploy-client-subscriptions: &deploy-client-subscriptions |-
-      docker load --input api.client.subscriptions.img
-      docker tag jsoliveira/api.client.subscriptions jsoliveira/api.client.subscriptions:${BITBUCKET_COMMIT};
-      docker push jsoliveira/api.client.subscriptions:${BITBUCKET_COMMIT};
+      docker load --input api-client-subscriptions.img
+      docker tag jsoliveira/api-client-subscriptions jsoliveira/api-client-subscriptions:${BITBUCKET_COMMIT};
+      docker push jsoliveira/api-client-subscriptions:${BITBUCKET_COMMIT};
   deploy-core-subscriptions: &deploy-core-subscriptions |-
-      docker load --input api.core.subscriptions.img
-      docker tag jsoliveira/api.core.subscriptions jsoliveira/api.core.subscriptions:${BITBUCKET_COMMIT};
-      docker push jsoliveira/api.core.subscriptions:${BITBUCKET_COMMIT};
+      docker load --input api-core-subscriptions.img
+      docker tag jsoliveira/api-core-subscriptions jsoliveira/api-core-subscriptions:${BITBUCKET_COMMIT};
+      docker push jsoliveira/api-core-subscriptions:${BITBUCKET_COMMIT};
   deploy-core-mail: &deploy-core-mail |-
-      docker load --input api.core.mail.img
-      docker tag jsoliveira/api.core.mail jsoliveira/api.core.mail:${BITBUCKET_COMMIT};
-      docker push jsoliveira/api.core.mail:${BITBUCKET_COMMIT};
+      docker load --input api-core-mail.img
+      docker tag jsoliveira/api-core-mail jsoliveira/api-core-mail:${BITBUCKET_COMMIT};
+      docker push jsoliveira/api-core-mail:${BITBUCKET_COMMIT};
   deploy-public-gateway: &deploy-public-gateway |-
       docker load --input public-gateway.img
       docker tag jsoliveira/public-gateway jsoliveira/public-gateway:${BITBUCKET_COMMIT};

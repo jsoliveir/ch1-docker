@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api.core.mail", "src\api.core.mail.csproj", "{19F244F2-C855-454E-A608-BF19391B25B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api-core-mail", "src\api-core-mail.csproj", "{19F244F2-C855-454E-A608-BF19391B25B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api.core.mail.tests", "tests\api.core.mail.tests.csproj", "{16FC37DB-314F-4F09-840F-6AE3E2DE0F51}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api-core-mail.tests", "tests\api-core-mail.tests.csproj", "{16FC37DB-314F-4F09-840F-6AE3E2DE0F51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

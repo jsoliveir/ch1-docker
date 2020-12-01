@@ -37,4 +37,4 @@ WORKDIR /app
 EXPOSE 8080
 USER appuser
 ENV ASPNETCORE_URLS http://*:8080
-ENTRYPOINT [ "dotnet","api.core.mail.dll"]
+ENTRYPOINT [ "dotnet","api-core-subscriptions.dll"]

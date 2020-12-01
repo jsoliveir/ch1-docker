@@ -8,8 +8,8 @@ services:
       - '8443:443'
     networks:
       - public
-  api.client.subscriptions:
-    build: ../../apis/api.client.subscriptions/
+  api-client-subscriptions:
+    build: ../../apis/api-client-subscriptions/
     environment:
         ASPNETCORE_ENVIRONMENT: K8s
     networks:
@@ -20,14 +20,14 @@ services:
     networks:
       - public
       - private 
-  api.core.subscriptions:
-    build: ../../apis/api.core.subscriptions/
+  api-core-subscriptions:
+    build: ../../apis/api-core-subscriptions/
     environment:
         ASPNETCORE_ENVIRONMENT: K8s
     networks:
       - private
-  api.core.mail:
-    build: ../../apis/api.core.mail/
+  api-core-mail:
+    build: ../../apis/api-core-mail/
     environment:
         ASPNETCORE_ENVIRONMENT: K8s
     networks:

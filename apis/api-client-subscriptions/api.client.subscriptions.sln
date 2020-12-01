@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api.client.subscriptions", "src\api.client.subscriptions.csproj", "{E180E1A0-ECD6-4F20-A179-40D20A3C0127}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api-client-subscriptions", "src\api-client-subscriptions.csproj", "{E180E1A0-ECD6-4F20-A179-40D20A3C0127}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api.client.subscriptions.tests", "tests\api.client.subscriptions.tests.csproj", "{AE262492-D916-41AF-89A6-0C6CFE2E19B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "api-client-subscriptions.tests", "tests\api-client-subscriptions.tests.csproj", "{AE262492-D916-41AF-89A6-0C6CFE2E19B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

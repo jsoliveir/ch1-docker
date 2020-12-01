@@ -23,11 +23,11 @@ All APIs in this repository were written in dotnet core 3.1 using C#
 			- **[lb/](services/rabbitmq/lb/)**	  
 				- _nginx load balancer for RabbitMQ_
 - **[apis/](apis/)**	  
-	- **[api.client.subscriptions/](apis/api.client.subscriptions/)**	  
+	- **[api-client-subscriptions/](apis/api-client-subscriptions/)**	  
 		- _public subscriptions api_
-	- **[api.core.subscriptions/](apis/api.core.subscriptions/)**	  
+	- **[api-core-subscriptions/](apis/api-core-subscriptions/)**	  
 		- _private subscriptions api_
-	- **[api.core.mail/](apis/api.core.mail/)**	  
+	- **[api-core-mail/](apis/api-core-mail/)**	  
 		- _private email deliverer api_
 
 # apis in this repository
@@ -69,7 +69,7 @@ There are two different types of networks: public and private.
 it's hosted in the public network
 - it cannot reach private services.
 - it routes incomming requests thru:
-	- the public api.client.subscriptions
+	- the public api-client-subscriptions
 	- the private-gateway
 - it exposes specific internal/private services
 - it takes control of what resources have been accessed
@@ -85,7 +85,7 @@ it's hosted in the public network
 - it restricts access to the private network
 - it exposes partial private services to the public network
 
-**The [api.client.subscriptions](apis/api.client.subscriptions/readme.md)**
+**The [api-client-subscriptions](apis/api-client-subscriptions/readme.md)**
 
 - it stands for basically handling requests for subscriptions creation
 - it can reach services in the public network
@@ -165,7 +165,7 @@ RabbitMQ cluster can take up to **2 minutes** to get up and running (clustering)
 
 While it is initializing, if core.subscription API gets requested it will not responding until it reaches the MQ cluster 
 
-Check the following documentation for more details: **[api.core.subscriptions/](apis/api.core.subscriptions/)**	
+Check the following documentation for more details: **[api-core-subscriptions/](apis/api-core-subscriptions/)**	
 
 **How to make sure that RabbitMQ is already up and running**
 
@@ -217,9 +217,9 @@ This repository has configurations to deploy container images into a container r
 
 Docker hub was used as the main container registry for the purpose of this demo)
 
-- [https://hub.docker.com/r/jsoliveira/api.client.subscriptions/tags](https://hub.docker.com/r/jsoliveira/api.client.subscriptions/tags)
-- [https://hub.docker.com/r/jsoliveira/api.core.subscriptions/tags](https://hub.docker.com/r/jsoliveira/api.core.subscriptions/tags)
-- [https://hub.docker.com/r/jsoliveira/api.core.mail/tags](https://hub.docker.com/r/jsoliveira/api.core.mail/tags)
+- [https://hub.docker.com/r/jsoliveira/api-client-subscriptions/tags](https://hub.docker.com/r/jsoliveira/api-client-subscriptions/tags)
+- [https://hub.docker.com/r/jsoliveira/api-core-subscriptions/tags](https://hub.docker.com/r/jsoliveira/api-core-subscriptions/tags)
+- [https://hub.docker.com/r/jsoliveira/api-core-mail/tags](https://hub.docker.com/r/jsoliveira/api-core-mail/tags)
 
 ##  CI/CD Bitbucket Pipelines
 [https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/](https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/)

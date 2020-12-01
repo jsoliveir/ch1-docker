@@ -14,6 +14,12 @@ definitions:
   build-core-mail: &build-core-mail |-
       docker build --rm apis/api.core.mail --tag jsoliveira/api.core.mail; 
       docker save --output api.core.mail.img jsoliveira/api.core.mail;
+  build-public-gateway: &build-public-gateway |-
+      docker build --rm services/gateways/public --tag jsoliveira/public-gateway; 
+      docker save --output public-gateway.img jsoliveira/public-gateway;
+  build-private-gateway: &build-private-gateway |-
+      docker build --rm services/gateways/private --tag jsoliveira/private-gateway; 
+      docker save --output private-gateway.img jsoliveira/private-gateway;
   deploy-client-subscriptions: &deploy-client-subscriptions |-
       docker load --input api.client.subscriptions.img
       docker tag jsoliveira/api.client.subscriptions jsoliveira/api.client.subscriptions:${BITBUCKET_COMMIT};
@@ -26,6 +32,14 @@ definitions:
       docker load --input api.core.mail.img
       docker tag jsoliveira/api.core.mail jsoliveira/api.core.mail:${BITBUCKET_COMMIT};
       docker push jsoliveira/api.core.mail:${BITBUCKET_COMMIT};
+  deploy-public-gateway: &deploy-public-gateway |-
+      docker load --input public-gateway.img
+      docker tag jsoliveira/public-gateway jsoliveira/public-gateway:${BITBUCKET_COMMIT};
+      docker push jsoliveira/public-gateway:${BITBUCKET_COMMIT};
+  deploy-private-gateway: &deploy-private-gateway |-
+      docker load --input private-gateway.img
+      docker tag jsoliveira/private-gateway jsoliveira/private-gateway:${BITBUCKET_COMMIT};
+      docker push jsoliveira/private-gateway:${BITBUCKET_COMMIT};
   unit-testing: &unit-testing |-
     for p in $(find -iname *test*.csproj); do \
       dotnet add $p package JUnitTestLogger || true;
@@ -58,28 +72,44 @@ pipelines:
                 - *build-core-mail
               artifacts:
                 - '*.img'
+          - step: 
+              name: "Build private gateway"
+              script: 
+                - *build-private-gateway
+              artifacts:
+                - '*.img'
+          - step: 
+              name: "Build public gateway"
+              script: 
+                - *build-public-gateway
+              artifacts:
+                - '*.img'
         - parallel:
           - step: 
               name: "Deploy client.subscriptions"
               script: 
                 - *docker-login
                 - *deploy-client-subscriptions
-              caches:
-                - docker
           - step: 
               name: "Deploy core.subscriptions"
               script: 
                 - *docker-login
                 - *deploy-core-subscriptions
-              caches:
-                - docker
           - step: 
               name: "Deploy core.mail"
               script: 
                 - *docker-login
                 - *deploy-core-mail
-              caches:
-                - docker
+          - step: 
+              name: "Deploy private gateway"
+              script: 
+                - *docker-login
+                - *deploy-private-gateway
+          - step: 
+              name: "Deploy public gateway"
+              script: 
+                - *docker-login
+                - *deploy-public-gateway
         - step: 
             name: "Deploy to production"
             trigger: manual
@@ -88,6 +118,6 @@ pipelines:
               - *deploy-client-subscriptions
               - *deploy-core-subscriptions
               - *deploy-core-mail
-            caches:
-                - docker
+              - *deploy-public-gateway
+              - *deploy-private-gateway
           

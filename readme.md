@@ -4,7 +4,7 @@ This repository contains infrastructure configurations and services in order to 
 
 [challenge.pdf](documentation/challenge.pdf)
 
-All the API are written in dotnet core 3.1 using C# language
+All APIs in this repository were written in dotnet core 3.1 using C#
 
 # What is in this repository
 
@@ -228,13 +228,19 @@ _password: **admin**_
 
 # CI/CD Integration
 
-This repository is taking advantage of the bitbucket-pipelines in order to deploy the container images to the cloud (docker hub was used as the main container registry for the purpose of this demo)
+This repository has configurations to deploy container images into a container registry.
+
+Docker hub was used as the main container registry for the purpose of this demo)
 
 - [https://hub.docker.com/r/jsoliveira/api.client.subscriptions/tags](https://hub.docker.com/r/jsoliveira/api.client.subscriptions/tags)
 - [https://hub.docker.com/r/jsoliveira/api.core.subscriptions/tags](https://hub.docker.com/r/jsoliveira/api.core.subscriptions/tags)
 - [https://hub.docker.com/r/jsoliveira/api.core.mail/tags](https://hub.docker.com/r/jsoliveira/api.core.mail/tags)
 
-you can see the CI/CD bitbucket pipelines working here [https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/](https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/)
+##  CI/CD Bitbucket Pipelines
+[https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/](https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/)
+
+## CI/CD Azure DevOps
+[https://dev.azure.com/jsoliveir/Cloud%20POC/_build?definitionId=1](https://dev.azure.com/jsoliveir/Cloud%20POC/_build?definitionId=1)
 
 
 # Cloud architecture proposal (tiny version)

@@ -26,7 +26,7 @@ stages:
         tags: |
           $(tag)
 
-  - job: build_api-core-subscriptions
+  - job: build_api_core_subscriptions
     displayName: Build api-core-subscriptions
     pool:
       vmImage: 'ubuntu-latest'
@@ -41,7 +41,7 @@ stages:
         tags: |
           $(tag)
 
-  - job: build_api-core-mail
+  - job: build_api_core_mail
     displayName: Build api-core-mail
     pool:
       vmImage: 'ubuntu-latest'

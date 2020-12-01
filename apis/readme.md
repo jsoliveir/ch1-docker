@@ -1,6 +1,6 @@
-# Microservices
+# apis
 
-In this directory you cam see the following microservices:
+In this directory you cam see the following apis:
 - api.client.subscriptions
 - api.core.subcriptions
 - api.mail.subscriptions

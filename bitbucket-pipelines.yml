@@ -6,13 +6,13 @@ definitions:
   docker-login: &docker-login |-
       docker login -u jsoliveira -p ${SECRET};
   build-client-subscriptions: &build-client-subscriptions |-
-      docker build --rm microservices/api.client.subscriptions/ --tag jsoliveira/api.client.subscriptions; 
+      docker build --rm apis/api.client.subscriptions/ --tag jsoliveira/api.client.subscriptions; 
       docker save --output api.client.subscriptions.img jsoliveira/api.client.subscriptions;
   build-core-subscriptions: &build-core-subscriptions |-
-      docker build --rm microservices/api.core.subscriptions/ --tag jsoliveira/api.core.subscriptions; 
+      docker build --rm apis/api.core.subscriptions/ --tag jsoliveira/api.core.subscriptions; 
       docker save --output api.core.subscriptions.img jsoliveira/api.core.subscriptions;
   build-core-mail: &build-core-mail |-
-      docker build --rm microservices/api.core.mail --tag jsoliveira/api.core.mail; 
+      docker build --rm apis/api.core.mail --tag jsoliveira/api.core.mail; 
       docker save --output api.core.mail.img jsoliveira/api.core.mail;
   deploy-client-subscriptions: &deploy-client-subscriptions |-
       docker load --input api.client.subscriptions.img

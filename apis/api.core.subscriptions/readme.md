@@ -32,7 +32,7 @@ Since it was used generic DB providers and the Dependency injection pattern, the
             Configuration.GetConnectionString("DefaultConnection")));
 ```
 
-https://bitbucket.org/jsoliveira/iban-services-poc/src/8030495d8d3cb28e2d83875e272b14caf67c2940/microservices/api.core.subscriptions/src/Startup.cs#lines-70
+https://bitbucket.org/jsoliveira/iban-services-poc/src/8030495d8d3cb28e2d83875e272b14caf67c2940/apis/api.core.subscriptions/src/Startup.cs#lines-70
 
 
 <br/>

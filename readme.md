@@ -11,29 +11,29 @@ All APIs in this repository were written in dotnet core 3.1 using C#
 - **[infrastructure/](infrastructure/)**	  
 	- **[docker/](infrastructure/docker)**		  
 		- _docker-compose infrastructure_
-	- **[services/](infrastructure/services/)**		  
-		- **[gateways/](infrastructure/services/gateways/)**	   
-			- **[public/](infrastructure/services/gateways/public/)**  
+	- **[services/](services/)**		  
+		- **[gateways/](services/gateways/)**	   
+			- **[public/](services/gateways/public/)**  
 				- _configurations for the public gateway_ 
-			- **[private/](infrastructure/services/gateways/private/)** 
+			- **[private/](services/gateways/private/)** 
 				- _configurations for the private internal gateway_
-		- **[rabbitmq/](infrastructure/services/rabbitmq/)**	   
-			- **[etc/](infrastructure/services/rabbitmq/etc/)**	  
+		- **[rabbitmq/](services/rabbitmq/)**	   
+			- **[etc/](services/rabbitmq/etc/)**	  
 				- _configurations for RabbitMQ message broker_
-			- **[lb/](infrastructure/services/rabbitmq/lb/)**	  
+			- **[lb/](services/rabbitmq/lb/)**	  
 				- _nginx load balancer for RabbitMQ_
-- **[microservices/](microservices/)**	  
-	- **[api.client.subscriptions/](microservices/api.client.subscriptions/)**	  
+- **[apis/](apis/)**	  
+	- **[api.client.subscriptions/](apis/api.client.subscriptions/)**	  
 		- _public subscriptions api_
-	- **[api.core.subscriptions/](microservices/api.core.subscriptions/)**	  
+	- **[api.core.subscriptions/](apis/api.core.subscriptions/)**	  
 		- _private subscriptions api_
-	- **[api.core.mail/](microservices/api.core.mail/)**	  
+	- **[api.core.mail/](apis/api.core.mail/)**	  
 		- _private email deliverer api_
 
-# Microservices in this repository
+# apis in this repository
 
 Please, take a look at the general documentation in this section
-[microservices/](microservices/)
+[apis/](apis/)
 
 # Solution architecture topology
 
@@ -64,7 +64,7 @@ There are two different types of networks: public and private.
 ## Services
 
 
-**[The public-gateway](infrastructure/services/gateways/public/)**
+**[The public-gateway](services/gateways/public/)**
 - 
 it's hosted in the public network
 - it cannot reach private services.
@@ -77,7 +77,7 @@ it's hosted in the public network
 - it take control over one first layer of security ( like validating auth tokens against an identity server, for instance) 
 - it produces interesting logs
 
-**[The private gateway](infrastructure/services/gateways/private/)**
+**[The private gateway](services/gateways/private/)**
 
 - it routes traffic to specific services in the private network 
 - it increases control over security (when exposing internal dashboards)
@@ -85,13 +85,13 @@ it's hosted in the public network
 - it restricts access to the private network
 - it exposes partial private services to the public network
 
-**The [api.client.subscriptions](microservices/api.client.subscriptions/readme.md)**
+**The [api.client.subscriptions](apis/api.client.subscriptions/readme.md)**
 
 - it stands for basically handling requests for subscriptions creation
 - it can reach services in the public network
 - it can reach services in the private network 
 
-**The [RabbitMQ (cluster)](infrastructure/services/rabbitmq/lb/nginx.conf)**
+**The [RabbitMQ (cluster)](services/rabbitmq/lb/nginx.conf)**
 
 - it is an Nginx load balancer
 - it is composed by two rabbitMQ servers in the cluster (rabbit-1, rabbit2)
@@ -155,7 +155,7 @@ _**optional**: if you want to download the dotnet core SDK in order to build the
     docker-compose up --force-recreate --remove-orphans api.client.subscription;
 ```
 
-_if you want to debug or startup an API using the dotnet core SDK please take a look at the existing API documentation in this repository [microservices/](microservices)_
+_if you want to debug or startup an API using the dotnet core SDK please take a look at the existing API documentation in this repository [apis/](apis)_
 
 
 ---
@@ -165,7 +165,7 @@ RabbitMQ cluster can take up to **2 minutes** to get up and running (clustering)
 
 While it is initializing, if core.subscription API gets requested it will not responding until it reaches the MQ cluster 
 
-Check the following documentation for more details: **[api.core.subscriptions/](microservices/api.core.subscriptions/)**	
+Check the following documentation for more details: **[api.core.subscriptions/](apis/api.core.subscriptions/)**	
 
 **How to make sure that RabbitMQ is already up and running**
 

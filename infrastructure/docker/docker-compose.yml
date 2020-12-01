@@ -45,7 +45,7 @@ services:
       RABBITMQ_ERLANG_COOKIE: DSHEVCXBBETJJVJWTOWT
     volumes:
       - ./temp/rabbitmq/:/var/lib/rabbitmq
-      - ../services/rabbitmq/etc/:/etc/rabbitmq/
+      - ../../services/rabbitmq/etc/:/etc/rabbitmq/
     networks:
       - private
   rabbit-2:

@@ -42,21 +42,7 @@ The architecture for running this project is based on docker-compose and follows
 for more details you can take a look at: 
 - [infrastructure/docker/docker-compose.yml](infrastructure/docker/docker-compose.yml)
 
-```go
-[WAN] 	|------------------------ [Docker Network] -------------------------------------|
-user -> |-> [public-gateway]              		  <-> | - network:  public				|
-		|  	||-> [api.client.subscriptions]    -| <-> | - network:  public + private	|
-		|  	|	 |-> [api.core.subscriptions]  -| <-> | - network:  private				|
-		|  	|	 |-> [api.core.mail]           -| <-> | - network:  private				|
-		|  	|--> [private-gateway]		        | <-> | - network:  public + private	|
-		|	 	 |-> [SMTP server] 	          <-| <-> | - network:  private				|
-		|     	 |-> [SEQ logs server]        <-| <-> | - network:  private				|
-		| 		 |-> [RabbitMQ (cluster)]     <-| <-> | - network:  private				|
-		|	  	     |-> [rabbit-1]	     	      <-> | - network:  private				|
-		|	  		 |-> [rabbit-2]	              <-> | - network:  private				|
-		|-------------------------------------------------------------------------------|
-```
-
+![docker-compose](documentation/docker-compose.png)
 
 
 # Explaining the different components
@@ -85,7 +71,7 @@ it's hosted in the public network
 - it routes incomming requests thru:
 	- the public api.client.subscriptions
 	- the private-gateway
-- it exposes internal services to the internet
+- it exposes specific internal/private services
 - it takes control of what resources have been accessed
 - it authenticate internal endpoints
 - it take control over one first layer of security ( like validating auth tokens against an identity server, for instance) 
@@ -93,8 +79,7 @@ it's hosted in the public network
 
 **[The private gateway](infrastructure/services/gateways/private/)**
 
-- it can reach services in the public network
-- it can reach services in the private network 
+- it routes traffic to specific services in the private network 
 - it increases control over security (when exposing internal dashboards)
 - it increases control over monitoring
 - it restricts access to the private network

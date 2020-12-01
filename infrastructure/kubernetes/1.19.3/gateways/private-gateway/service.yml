@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: private-gateway
+spec:
+  selector:
+    app: private-gateway
+  ports:
+  - port: 80
+    targetPort: 80

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: public-gateway
+spec:
+  selector:
+    matchLabels:
+      app: public-gateway
+  template:
+    metadata:
+      labels:
+        app: public-gateway
+    spec:
+      containers:
+      - name: public-gateway
+        image: jsoliveira/public-gateway:4670300e1ca637776509c1a96e238b9a935d9d55
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80

@@ -14,9 +14,18 @@ spec:
       containers:
       - name: private-gateway
         image: jsoliveira/private-gateway:4670300e1ca637776509c1a96e238b9a935d9d55
+        volumeMounts:
+          - name: private-gateway-configmap
+            mountPath: "/etc/nginx/nginx.conf"
+            subPath: nginx.conf
+            readOnly: true
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         ports:
         - containerPort: 80
+      volumes:
+        - name: private-gateway-configmap
+          configMap:
+            name: private-gateway-configmap

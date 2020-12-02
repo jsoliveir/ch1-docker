@@ -3,3 +3,9 @@ kind: Kustomization
 resources:
   - deployment.yml
   - service.yml
+
+configMapGenerator:
+  - name: public-gateway-configmap
+    files:
+      - configs/nginx.conf
+      - configs/credentials

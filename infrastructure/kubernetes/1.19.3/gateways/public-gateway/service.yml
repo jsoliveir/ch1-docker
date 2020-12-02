@@ -6,5 +6,6 @@ spec:
   selector:
     app: public-gateway
   ports:
-  - port: 80
+  - port: 8081
     targetPort: 80
+  type: LoadBalancer

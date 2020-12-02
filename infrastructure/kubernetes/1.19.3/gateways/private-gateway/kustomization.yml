@@ -3,3 +3,8 @@ kind: Kustomization
 resources:
   - deployment.yml
   - service.yml
+
+configMapGenerator:
+  - name: private-gateway-configmap
+    files:
+      - configs/nginx.conf

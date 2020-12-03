@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rabbit-mq
+  name: rabbitmq
 spec:
   selector:
     matchLabels:
-      app: rabbit-mq
+      app: rabbitmq
   template:
     metadata:
       labels:
-        app: rabbit-mq
+        app: rabbitmq
     spec:
       containers:
-      - name: rabbit-mq
+      - name: rabbitmq
         image: rabbitmq:3-management
         resources:
           limits:

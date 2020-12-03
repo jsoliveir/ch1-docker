@@ -11,17 +11,19 @@ All APIs in this repository were written in dotnet core 3.1 using C#
 - **[infrastructure/](infrastructure/)**	  
 	- **[docker/](infrastructure/docker)**		  
 		- _docker-compose infrastructure_
-	- **[services/](services/)**		  
-		- **[gateways/](services/gateways/)**	   
-			- **[public/](services/gateways/public/)**  
-				- _configurations for the public gateway_ 
-			- **[private/](services/gateways/private/)** 
-				- _configurations for the private internal gateway_
-		- **[rabbitmq/](services/rabbitmq/)**	   
-			- **[etc/](services/rabbitmq/etc/)**	  
-				- _configurations for RabbitMQ message broker_
-			- **[lb/](services/rabbitmq/lb/)**	  
-				- _nginx load balancer for RabbitMQ_
+	- **[kubernetes/1.19.3](infrastructure/kubernetes/1.19.3)**		  
+		- _kubernetes infrastructure_
+- **[services/](services/)**		  
+	- **[gateways/](services/gateways/)**	   
+		- **[public/](services/gateways/public/)**  
+			- _configurations for the public gateway_ 
+		- **[private/](services/gateways/private/)** 
+			- _configurations for the private internal gateway_
+	- **[rabbitmq/](services/rabbitmq/)**	   
+		- **[etc/](services/rabbitmq/etc/)**	  
+			- _configurations for RabbitMQ message broker_
+		- **[lb/](services/rabbitmq/lb/)**	  
+			- _nginx load balancer for RabbitMQ_
 - **[apis/](apis/)**	  
 	- **[api-client-subscriptions/](apis/api-client-subscriptions/)**	  
 		- _public subscriptions api_
@@ -35,7 +37,7 @@ All APIs in this repository were written in dotnet core 3.1 using C#
 Please, take a look at the general documentation in this section
 [apis/](apis/)
 
-# Solution architecture topology
+# Solution architecture topology (Docker)
 
 The architecture for running this project is based on docker-compose and follows the schema bellow
 
@@ -111,7 +113,7 @@ it's hosted in the public network
 - it can produce nice dashboards to take control over what's happening the APIs
 - the dashboard service is exposed thru the private and public gateway for testing purposes
 
-# How to build and run
+# How to build and run (Docker)
 
 **Make sure that you have docker installed on your local machine**
 
@@ -144,19 +146,24 @@ _**optional**: if you want to download the dotnet core SDK in order to build the
 **Startup all containers**
 
 ```shell
-    docker-compose up --force-recreate --remove-orphans;
+    docker-compose -f "infrastructure/docker/docker-compose.yml" up --force-recreate --remove-orphans --build
 ```
 
 **Startup a single container**
 
 ```shell
 	# docker-compose build <api_name>;
-    docker-compose build api.client.subscription;
-    docker-compose up --force-recreate --remove-orphans api.client.subscription;
+    docker-compose -f "infrastructure/docker/docker-compose.yml" up --force-recreate --remove-orphans --build api-client-subscription;
 ```
 
 _if you want to debug or startup an API using the dotnet core SDK please take a look at the existing API documentation in this repository [apis/](apis)_
 
+
+# How to deploy into Kubernetes Cluster
+
+```shell
+	kubectl kustomize  "infrastructure/kubernetes/1.19.3/ | kc apply -f -
+```
 
 ---
 # Important Notes

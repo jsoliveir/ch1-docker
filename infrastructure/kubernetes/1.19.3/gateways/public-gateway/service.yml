@@ -6,6 +6,7 @@ spec:
   selector:
     app: public-gateway
   ports:
-  - port: 8081
+  - port: 8088
     targetPort: 80
-  type: LoadBalancer
+    nodePort: 30000
+  type: NodePort

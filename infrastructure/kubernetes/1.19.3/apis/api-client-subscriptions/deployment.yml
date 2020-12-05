@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: api-client-subscriptions
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: api-client-subscriptions
@@ -10,13 +11,14 @@ spec:
     metadata:
       labels:
         app: api-client-subscriptions
-    spec:      
+    spec:  
       containers:
       - name: api-client-subscriptions
-        image: jsoliveira/api-client-subscriptions:4670300e1ca637776509c1a96e238b9a935d9d55
+        image: jsoliveira/api-client-subscriptions:latest
+        imagePullPolicy: Always
         env:
-          - name: Api__CoreSubscriptions__BaseAddress
-            value: http://private-gateway.gateways/core.subscriptions/api/v1/Subscription
+          - name: ASPNETCORE_ENVIRONMENT
+            value: K8s
         resources:
           limits:
             memory: "128Mi"

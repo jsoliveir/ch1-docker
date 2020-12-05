@@ -13,10 +13,11 @@ spec:
     spec:
       containers:
       - name: api-core-mail
-        image: jsoliveira/api-core-mail:4670300e1ca637776509c1a96e238b9a935d9d55
+        image: jsoliveira/api-core-mail:latest
+        imagePullPolicy: Always
         env:
-          - name: RabbitMQ__Client__HostName 
-            value: rabbitmq.services
+          - name: ASPNETCORE_ENVIRONMENT
+            value: K8s
         resources:
           limits:
             memory: "128Mi"

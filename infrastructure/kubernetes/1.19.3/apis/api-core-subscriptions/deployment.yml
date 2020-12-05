@@ -14,6 +14,9 @@ spec:
       containers:
       - name: api-core-subscriptions
         image: jsoliveira/api-core-subscriptions:4670300e1ca637776509c1a96e238b9a935d9d55
+        env:
+          - name: RabbitMQ__Client__HostName 
+            value: rabbitmq.services
         resources:
           limits:
             memory: "128Mi"

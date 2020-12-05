@@ -4,6 +4,9 @@ resources:
   - deployment.yml
   - service.yml
 
+generatorOptions:
+  disableNameSuffixHash: true
+  
 configMapGenerator:
   - name: private-gateway-configmap
     files:

@@ -35,7 +35,7 @@ definitions:
   deploy-core-mail: &deploy-core-mail |-
       docker load --input api-core-mail.img
       docker tag jsoliveira/api-core-mail jsoliveira/api-core-mail:${BITBUCKET_COMMIT};
-      docker tag jsoliveira/api-core-subscriptions jsoliveira/api-core-mail:latest;
+      docker tag jsoliveira/api-core-mail jsoliveira/api-core-mail:latest;
       docker push jsoliveira/api-core-mail:${BITBUCKET_COMMIT};
       docker push jsoliveira/api-core-mail:latest;
   deploy-public-gateway: &deploy-public-gateway |-

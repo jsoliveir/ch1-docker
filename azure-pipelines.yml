@@ -25,6 +25,7 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/apis/api-client-subscriptions/Dockerfile'
         tags: |
           $(tag)
+          latest
 
   - job: build_api_core_subscriptions
     displayName: Build api-core-subscriptions
@@ -40,6 +41,7 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/apis/api-core-subscriptions/Dockerfile'
         tags: |
           $(tag)
+          latest
 
   - job: build_api_core_mail
     displayName: Build api-core-mail
@@ -55,6 +57,7 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/apis/api-core-mail/Dockerfile'
         tags: |
           $(tag)
+          latest
   - job: build_public_gateway
     displayName: Build public-gateway
     pool:
@@ -69,6 +72,7 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/services/gateways/public/Dockerfile'
         tags: |
           $(tag)
+          latest
   - job: build_private_gateway
     displayName: Build private-gateway
     pool:
@@ -83,5 +87,6 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/services/gateways/private/Dockerfile'
         tags: |
           $(tag)
+          latest
 
   

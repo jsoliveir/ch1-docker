@@ -169,13 +169,15 @@ For demo purposes the public gateway is exposed using a NodePort service
 
 Given that the public gateway is exposed on NodePort 30000 these are the URLs available :
 
-[http://localhost:30000/public/subscriptions/swagger/index.html](http://localhost:30000/public/subscriptions/swagger/index.html)
+[http://localhost:30080/public/subscriptions/swagger/index.html](http://localhost:30000/public/subscriptions/swagger/index.html)
 
-[http://localhost:30000/private/mq/](http://localhost:30000/private/mq/)
+[http://localhost:30080/private/mq/](http://localhost:30000/private/mq/)
 
-[http://localhost:30000/private/seq/](http://localhost:30000/private/seq/)
+[http://localhost:30080/private/seq/](http://localhost:30000/private/seq/)
 
-[http://localhost:30000/private/seq/](http://localhost:30000/private/smtp/)
+[http://localhost:30080/private/seq/](http://localhost:30000/private/smtp/)
+
+The links below are also available thru HTTPS over port **30443**
 
 In a production environment with multiple nodes (VM) the public gateway would be exposed thru an ingress controller or thru a LoadBalance service.
 

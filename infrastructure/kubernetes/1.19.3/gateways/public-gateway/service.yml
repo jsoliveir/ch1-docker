@@ -6,7 +6,12 @@ spec:
   selector:
     app: public-gateway
   ports:
-  - port: 8088
+  - name: http
+    port: 8080
     targetPort: 80
-    nodePort: 30000
+    nodePort: 30080
+  - name: https
+    port: 8443
+    targetPort: 443
+    nodePort: 30443
   type: NodePort

@@ -6,7 +6,13 @@ resources:
 
 generatorOptions:
   disableNameSuffixHash: true
-  
+
+secretGenerator:
+- name: public-gateway-certificates
+  files:
+    - configs/certificates/localhost.key
+    - configs/certificates/localhost.crt
+
 configMapGenerator:
   - name: public-gateway-configmap
     files:

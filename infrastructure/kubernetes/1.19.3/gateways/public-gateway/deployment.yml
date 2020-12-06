@@ -13,7 +13,8 @@ spec:
     spec:
       containers:
       - name: public-gateway
-        image: jsoliveira/public-gateway:4670300e1ca637776509c1a96e238b9a935d9d55
+        image: nginx:alpine
+        imagePullPolicy: Always
         volumeMounts:
           - name: public-gateway-configmap
             mountPath: "/etc/nginx/nginx.conf"
@@ -22,6 +23,9 @@ spec:
           - name: public-gateway-configmap
             mountPath: "/etc/nginx/credentials"
             subPath: credentials
+            readOnly: true
+          - name: public-gateway-certificates
+            mountPath: "/etc/nginx/certificates"
             readOnly: true
         resources:
           limits:
@@ -33,3 +37,6 @@ spec:
         - name: public-gateway-configmap
           configMap:
             name: public-gateway-configmap
+        - name: public-gateway-certificates
+          secret:
+            secretName: public-gateway-certificates

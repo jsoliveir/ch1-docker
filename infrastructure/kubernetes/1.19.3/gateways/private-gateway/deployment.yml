@@ -13,7 +13,8 @@ spec:
     spec:
       containers:
       - name: private-gateway
-        image: jsoliveira/private-gateway:4670300e1ca637776509c1a96e238b9a935d9d55
+        image: nginx:alpine
+        imagePullPolicy: Always
         volumeMounts:
           - name: private-gateway-configmap
             mountPath: "/etc/nginx/nginx.conf"

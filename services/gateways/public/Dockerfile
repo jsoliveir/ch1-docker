@@ -1,5 +1,5 @@
 FROM nginx:alpine as serve
-COPY certs/ /etc/nginx/certs/
+COPY certificates/ /etc/nginx/certificates/
 COPY credentials /etc/nginx/credentials
 COPY nginx.conf /etc/nginx/nginx.conf
 

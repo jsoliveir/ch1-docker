@@ -14,12 +14,6 @@ definitions:
   build-core-mail: &build-core-mail |-
       docker build --rm apis/api-core-mail --tag jsoliveira/api-core-mail; 
       docker save --output api-core-mail.img jsoliveira/api-core-mail;
-  build-public-gateway: &build-public-gateway |-
-      docker build --rm services/gateways/public --tag jsoliveira/public-gateway; 
-      docker save --output public-gateway.img jsoliveira/public-gateway;
-  build-private-gateway: &build-private-gateway |-
-      docker build --rm services/gateways/private --tag jsoliveira/private-gateway; 
-      docker save --output private-gateway.img jsoliveira/private-gateway;
   deploy-client-subscriptions: &deploy-client-subscriptions |-
       docker load --input api-client-subscriptions.img
       docker tag jsoliveira/api-client-subscriptions jsoliveira/api-client-subscriptions:${BITBUCKET_COMMIT};
@@ -38,18 +32,6 @@ definitions:
       docker tag jsoliveira/api-core-mail jsoliveira/api-core-mail:latest;
       docker push jsoliveira/api-core-mail:${BITBUCKET_COMMIT};
       docker push jsoliveira/api-core-mail:latest;
-  deploy-public-gateway: &deploy-public-gateway |-
-      docker load --input public-gateway.img
-      docker tag jsoliveira/public-gateway jsoliveira/public-gateway:${BITBUCKET_COMMIT};
-      docker tag jsoliveira/public-gateway jsoliveira/public-gateway:latest;
-      docker push jsoliveira/public-gateway:${BITBUCKET_COMMIT};
-      docker push jsoliveira/public-gateway:latest;
-  deploy-private-gateway: &deploy-private-gateway |-
-      docker load --input private-gateway.img
-      docker tag jsoliveira/private-gateway jsoliveira/private-gateway:${BITBUCKET_COMMIT};
-      docker tag jsoliveira/private-gateway jsoliveira/private-gateway:latest;
-      docker push jsoliveira/private-gateway:${BITBUCKET_COMMIT};
-      docker push jsoliveira/private-gateway:latest;
   unit-testing: &unit-testing |-
     for p in $(find -iname *test*.csproj); do \
       dotnet add $p package JUnitTestLogger || true;

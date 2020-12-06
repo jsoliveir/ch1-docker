@@ -58,35 +58,4 @@ stages:
         tags: |
           $(tag)
           latest
-  - job: build_public_gateway
-    displayName: Build public-gateway
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - task: Docker@2
-      displayName: Build public-gateway
-      inputs:
-        command: buildAndPush
-        repository: 'jsoliveira/public-gateway'
-        containerRegistry: 'Docker Hub (jsoliveira)'
-        dockerfile: '$(Build.SourcesDirectory)/services/gateways/public/Dockerfile'
-        tags: |
-          $(tag)
-          latest
-  - job: build_private_gateway
-    displayName: Build private-gateway
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - task: Docker@2
-      displayName: Build private-gateway
-      inputs:
-        command: buildAndPush
-        repository: 'jsoliveira/private-gateway'
-        containerRegistry: 'Docker Hub (jsoliveira)'
-        dockerfile: '$(Build.SourcesDirectory)/services/gateways/private/Dockerfile'
-        tags: |
-          $(tag)
-          latest
-
   

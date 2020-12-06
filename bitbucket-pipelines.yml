@@ -64,18 +64,6 @@ pipelines:
                 - *build-core-mail
               artifacts:
                 - '*.img'
-          - step: 
-              name: "Build private gateway"
-              script: 
-                - *build-private-gateway
-              artifacts:
-                - '*.img'
-          - step: 
-              name: "Build public gateway"
-              script: 
-                - *build-public-gateway
-              artifacts:
-                - '*.img'
         - parallel:
           - step: 
               name: "Deploy client.subscriptions"
@@ -92,16 +80,6 @@ pipelines:
               script: 
                 - *docker-login
                 - *deploy-core-mail
-          - step: 
-              name: "Deploy private gateway"
-              script: 
-                - *docker-login
-                - *deploy-private-gateway
-          - step: 
-              name: "Deploy public gateway"
-              script: 
-                - *docker-login
-                - *deploy-public-gateway
         - step: 
             name: "Deploy to production"
             trigger: manual
@@ -110,6 +88,4 @@ pipelines:
               - *deploy-client-subscriptions
               - *deploy-core-subscriptions
               - *deploy-core-mail
-              - *deploy-public-gateway
-              - *deploy-private-gateway
           

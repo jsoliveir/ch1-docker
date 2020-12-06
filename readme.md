@@ -24,6 +24,12 @@ All APIs in this repository were written in dotnet core 3.1 using C#
 			- _configurations for RabbitMQ message broker_
 		- **[lb/](services/rabbitmq/lb/)**	  
 			- _nginx load balancer for RabbitMQ_
+	- **[grafana/](grafana/)**	   
+		- _grafana monitoring configurations_
+	- **[prometheus/](grafana/)**	   
+		- _prometheus metrics collecting configurations_
+	- **[promtail/](grafana/)**	   
+		- _promtail log files parser configurations_
 - **[apis/](apis/)**	  
 	- **[api-client-subscriptions/](apis/api-client-subscriptions/)**	  
 		- _public subscriptions api_

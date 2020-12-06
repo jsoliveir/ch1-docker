@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+  
+  # public gateway
+  public-gateway:
+    build: ../../services/gateways/public/
+    restart: on-failure
+    ports:
+      - '8080:80'
+      - '8443:443'
+    volumes:
+        - logs:/var/log/
+    networks:
+      - public
+      
+  #private-gateway
+  private-gateway:
+    build: ../../services/gateways/private/
+    restart: on-failure
+    volumes:
+      - logs:/var/log/
+    networks:
+      - public
+      - private 

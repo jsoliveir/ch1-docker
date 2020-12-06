@@ -14,6 +14,9 @@ services:
       file: services.yml
       service: api-core-mail
   rabbitmq:
+    depends_on:
+      - rabbit-1
+      - rabbit-2
     extends:
       file: services.yml
       service: rabbitmq-lb
@@ -44,10 +47,25 @@ services:
       file: tools.yml
       service: seq
   smtp:
-     extends:
+    extends:
       file: tools.yml
       service: smtp
-
+  grafana:
+    extends:
+      file: tools.yml
+      service: grafana
+  prometheus:
+    extends:
+      file: tools.yml
+      service: prometheus
+  promtail:
+    extends:
+      file: tools.yml
+      service: promtail
+  loki:
+    extends:
+      file: tools.yml
+      service: loki
 #infrastructure
 volumes:
   logs: {}

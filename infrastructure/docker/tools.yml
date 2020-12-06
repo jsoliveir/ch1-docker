@@ -4,15 +4,43 @@ services:
     image: datalust/seq
     environment:
       ACCEPT_EULA: 'Y'
-    ports:
-      - '5341:5341'
     volumes:
       - ./temp/seq/data:/data
     networks:
       - private
   smtp:
     image: rnwood/smtp4dev:v3
-    ports:
-      - '2525:25'
+    networks:
+      - private
+  grafana:
+    image: grafana/grafana:7.2.0
+    environment:
+      GF_INSTALL_PLUGINS: grafana-piechart-panel
+      GF_SERVER_ROOT_URL: /private/grafana/
+      GF_SERVER_SERVE_FROM_SUB_PATH: 'true'
+    volumes:
+      - ../../services/grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - private
+  prometheus:
+    image: prom/prometheus:v2.21.0
+    volumes:
+      - ../../services/prometheus/:/etc/prometheus/
+      - ./temp/prometheus/:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/config.yml"
+      - "--storage.tsdb.path=/prometheus"
+    networks:
+      - private
+  promtail:
+    image: grafana/promtail:1.6.1
+    volumes:
+      - logs:/var/log
+      - ../../services/promtail/config.yml:/etc/promtail/config.yml
+    networks:
+      - private
+  loki:
+    image: grafana/loki:1.6.1
+    command: -config.file=/etc/loki/local-config.yaml
     networks:
       - private

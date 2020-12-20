@@ -52,19 +52,19 @@ services:
       service: smtp
   grafana:
     extends:
-      file: tools.yml
+      file: monitoring.yml
       service: grafana
   prometheus:
     extends:
-      file: tools.yml
+      file: monitoring.yml
       service: prometheus
   promtail:
     extends:
-      file: tools.yml
+      file: monitoring.yml
       service: promtail
   loki:
     extends:
-      file: tools.yml
+      file: monitoring.yml
       service: loki
 #infrastructure
 volumes:

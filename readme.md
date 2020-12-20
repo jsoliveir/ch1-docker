@@ -173,15 +173,17 @@ For demo purposes the public gateway is exposed using a NodePort service
 	kubectl kustomize  "infrastructure/kubernetes/1.19.3/" | kubectl apply -f -
 ```
 
-Given that the public gateway is exposed on NodePort 30000 these are the URLs available :
+The public gateway is exposed on port 8080.
 
-[http://localhost:30080/public/subscriptions/swagger/index.html](http://localhost:30000/public/subscriptions/swagger/index.html)
+These are the URLs available :
 
-[http://localhost:30080/private/mq/](http://localhost:30000/private/mq/)
+[http://localhost:8080/public/subscriptions/swagger/index.html](http://localhost:8080/public/subscriptions/swagger/index.html)
 
-[http://localhost:30080/private/seq/](http://localhost:30000/private/seq/)
+[http://localhost:8080/private/mq/](http://localhost:8080/private/mq/)
 
-[http://localhost:30080/private/seq/](http://localhost:30000/private/smtp/)
+[http://localhost:8080/private/seq/](http://localhost:8080/private/seq/)
+
+[http://localhost:8080/private/seq/](http://localhost:8080/private/smtp/)
 
 The links below are also available thru HTTPS over port **30443**
 

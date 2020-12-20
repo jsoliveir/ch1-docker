@@ -1,6 +1,6 @@
 scrape_configs:
 - job_name: public-gateway
-  scrape_interval: 100ms
+  scrape_interval: 5000ms
   static_configs:
   - targets:
     - public-gateway:9113

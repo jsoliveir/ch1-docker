@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+      - name: prometheus
+        image:  prom/prometheus:v2.21.0
+        volumeMounts:
+          - mountPath: /etc/prometheus/config.yml
+            name: prometheus-configmap
+            subPath: config.yml
+          - mountPath: /prometheus/data
+            name: prometheus-data
+
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 9090
+      volumes:
+        - name: prometheus-configmap
+          configMap:
+            name: prometheus-configmap
+        - name: prometheus-data
+          persistentVolumeClaim:
+            claimName: prometheus-pvc

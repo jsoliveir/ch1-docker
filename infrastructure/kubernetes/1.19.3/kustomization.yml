@@ -5,3 +5,6 @@ bases:
   - gateways/
   - services/
   - tools/
+  - monitoring/
+resources:
+  - logging-pv.yml

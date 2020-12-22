@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client.Core.DependencyInjection;
+using Prometheus;
 
 namespace Api.Core.Mail
 {
@@ -23,8 +24,10 @@ namespace Api.Core.Mail
         public IConfigurationRoot Configuration { get; }
         public SmtpConfiguration SmtpConfiguration { get; }
         public SeqConfiguration SeqConfiguration { get; }
-
         public RabbitMQConfiguration RabbitConfiguration { get; }
+
+        public Counter PrometheusRequestPathCounter { get; }
+        public Counter PrometheusErrorCounter { get; }
 
         public Startup(IWebHostEnvironment env)
         {
@@ -41,6 +44,22 @@ namespace Api.Core.Mail
             Configuration.GetSection("RabbitMQ").Bind(RabbitConfiguration);
             Configuration.GetSection("Seq").Bind(SeqConfiguration);
             Configuration.GetSection("Smtp").Bind(SmtpConfiguration);
+
+            PrometheusRequestPathCounter = Metrics.CreateCounter(
+                "api_path_counter",
+                "Counts requests to the client subscrptions API endpoints",
+                new CounterConfiguration
+                {
+                    LabelNames = new[] { "method", "endpoint" }
+                });
+
+            PrometheusErrorCounter = Metrics.CreateCounter(
+                "api_error_counter",
+                "Counts API [400-500] Response Status Codes",
+                new CounterConfiguration
+                {
+                    LabelNames = new[] { "status_code" }
+                });
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -82,6 +101,25 @@ namespace Api.Core.Mail
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.Use((context, next) =>
+            {
+                PrometheusRequestPathCounter
+                    .WithLabels(
+                        context.Request.Method,
+                        context.Request.Path)
+                    .Inc();
+
+                return next();
+            });
+
+            app.UseStatusCodePages(async context =>
+            {
+                PrometheusErrorCounter
+                  .WithLabels(
+                      context.HttpContext.Response.StatusCode.ToString())
+                  .Inc();
+            });
+
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>

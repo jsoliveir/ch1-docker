@@ -14,9 +14,34 @@ spec:
       containers:
       - name: grafana
         image:  grafana/grafana:7.2.0
+        volumeMounts:
+          - mountPath: /etc/grafana/provisioning/datasources/all.yml
+            name: grafana-conf
+            subPath: datasources.yml
+          - mountPath: /etc/grafana/provisioning/dashboards/all.yml
+            subPath: dashboards.yml
+            name: grafana-conf
+          - mountPath: /var/lib/grafana/dashboards/
+            name: grafana-dashboards
+        env:
+         - name: GF_INSTALL_PLUGINS
+           value: 'grafana-piechart-panel'
+         - name: GF_SERVER_ROOT_URL
+           value: '/private/grafana/'
+         - name: GF_SERVER_SERVE_FROM_SUB_PATH
+           value: 'true'
         resources:
           limits:
             memory: "128Mi"
             cpu: "100m"
         ports:
         - containerPort: 3000
+      volumes:
+        - name: grafana-conf
+          configMap:
+            name: grafana-configmap
+        - name: grafana-dashboards
+          configMap:
+            name: grafana-dashboards-configmap
+
+        

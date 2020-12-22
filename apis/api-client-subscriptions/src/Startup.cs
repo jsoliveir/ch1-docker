@@ -19,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Prometheus;
 
 namespace Api.Client.Subscriptions
 {
@@ -31,12 +32,29 @@ namespace Api.Client.Subscriptions
                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                .AddEnvironmentVariables()
                .Build();
+
+            PrometheusRequestPathCounter = Metrics.CreateCounter(
+                 "client_subscriptions_path_counter",
+                 "Counts requests to the client subscrptions API endpoints",
+                 new CounterConfiguration
+                 {
+                     LabelNames = new[] { "method", "endpoint" }
+                 });
+            PrometheusErrorCounter = Metrics.CreateCounter(
+                   "client_subscriptions_error_counter",
+                   "Counts API [400-500] Response Status Codes",
+                   new CounterConfiguration
+                   {
+                       LabelNames = new[] { "status_code" }
+                   });
         }
 
         public IConfigurationRoot Configuration { get; }
+        public Counter PrometheusRequestPathCounter { get; }
+        public Counter PrometheusErrorCounter { get; }
 
         public void ConfigureServices(IServiceCollection services)
-        {
+        {          
             services.AddControllers()
                 .AddJsonOptions(opts =>
                 {
@@ -118,6 +136,26 @@ namespace Api.Client.Subscriptions
                 app.UseDeveloperExceptionPage();
             }
 
+            app.Use((context, next) =>
+            {
+                PrometheusRequestPathCounter
+                    .WithLabels(
+                        context.Request.Method,
+                        context.Request.Path)
+                    .Inc();
+
+                return next();
+            });
+
+            app.UseStatusCodePages(async context =>
+            {
+                PrometheusErrorCounter
+                  .WithLabels(
+                      context.HttpContext.Response.StatusCode.ToString())
+                  .Inc();
+
+            });
+
             app.UseSwagger(c=>
             {
                 c.PreSerializeFilters.Add((document, request) =>
@@ -148,10 +186,13 @@ namespace Api.Client.Subscriptions
 
             app.UseAuthorization();
 
+            app.UseHttpMetrics();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
+                endpoints.MapMetrics();
+            });         
 
         }
     }

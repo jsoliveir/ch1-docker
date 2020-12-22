@@ -34,14 +34,14 @@ namespace Api.Client.Subscriptions
                .Build();
 
             PrometheusRequestPathCounter = Metrics.CreateCounter(
-                 "client_subscriptions_path_counter",
+                 "api_path_counter",
                  "Counts requests to the client subscrptions API endpoints",
                  new CounterConfiguration
                  {
                      LabelNames = new[] { "method", "endpoint" }
                  });
             PrometheusErrorCounter = Metrics.CreateCounter(
-                   "client_subscriptions_error_counter",
+                   "api_error_counter",
                    "Counts API [400-500] Response Status Codes",
                    new CounterConfiguration
                    {

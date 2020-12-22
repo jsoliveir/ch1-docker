@@ -6,5 +6,7 @@ bases:
   - services/
   - tools/
   - monitoring/
-resources:
-  - logging-pv.yml
+  - storage/
+
+generatorOptions:
+  disableNameSuffixHash: true

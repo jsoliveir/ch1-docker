@@ -130,10 +130,13 @@ namespace Api.Core.Subscriptions
 
             app.UseRouting();
 
+            app.UseHttpMetrics();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
+                endpoints.MapMetrics();
+            });     
         }
     }
 }

@@ -129,10 +129,13 @@ namespace Api.Core.Mail
 
             app.UseRouting();
 
+            app.UseHttpMetrics();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
+                endpoints.MapMetrics();
+            });     
         }
     }
 }

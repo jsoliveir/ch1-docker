@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - deployment.yml
   - service.yml
-  - prometheus-pvc.yml
+  - persistentvolumeclaim.yml
 
 generatorOptions:
   disableNameSuffixHash: true
@@ -11,4 +11,4 @@ generatorOptions:
 configMapGenerator:
   - name: prometheus-configmap
     files:
-      - configs/config.yml
+      - configs/prometheus.yml

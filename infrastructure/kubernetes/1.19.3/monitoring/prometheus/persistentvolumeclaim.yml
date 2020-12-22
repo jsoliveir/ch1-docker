@@ -4,7 +4,7 @@ metadata:
   name: prometheus-pvc
 spec:
   storageClassName: manual
-  volumeName: logging-pv
+  volumeName: prometheus-pv
   accessModes:
     - ReadWriteOnce
   resources:

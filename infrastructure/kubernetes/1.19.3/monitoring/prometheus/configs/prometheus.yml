@@ -1,0 +1,17 @@
+scrape_configs:
+- job_name: 'API Services (namespace: apis)'
+  bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+  scrape_interval: 1000ms
+  scheme: http
+  metrics_path: /metrics
+  kubernetes_sd_configs:  
+    - role: service
+      namespaces:
+        names:
+          - apis
+  relabel_configs:
+    - source_labels: 
+      - __meta_kubernetes_namespace
+      - __meta_kubernetes_endpoint_port_number
+      regex: (.*)
+      action: keep

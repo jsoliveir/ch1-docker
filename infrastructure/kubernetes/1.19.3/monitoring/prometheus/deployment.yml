@@ -13,11 +13,11 @@ spec:
     spec:
       containers:
       - name: prometheus
-        image:  prom/prometheus:v2.21.0
+        image:  prom/prometheus:v2.23.0
         volumeMounts:
-          - mountPath: /etc/prometheus/config.yml
+          - mountPath: /etc/prometheus/prometheus.yml
             name: prometheus-configmap
-            subPath: config.yml
+            subPath: prometheus.yml
           - mountPath: /prometheus/data
             name: prometheus-data
 
@@ -32,5 +32,6 @@ spec:
           configMap:
             name: prometheus-configmap
         - name: prometheus-data
-          persistentVolumeClaim:
-            claimName: prometheus-pvc
+          hostPath:
+            type: DirectoryOrCreate
+            path: "/run/desktop/mnt/host/c/tmp/prometheus"

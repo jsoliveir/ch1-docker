@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loki
+spec:
+  selector:
+    matchLabels:
+      app: loki
+  template:
+    metadata:
+      labels:
+        app: loki
+    spec:
+      securityContext:
+          runAsNonRoot: false
+      containers:
+      - name: loki
+        image:  grafana/loki:2.0.0      
+        volumeMounts:
+          - mountPath: /loki/chunks
+            name: loki
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 3100
+
+      volumes:
+        - name: loki
+          persistentVolumeClaim:
+            claimName: loki-pvc

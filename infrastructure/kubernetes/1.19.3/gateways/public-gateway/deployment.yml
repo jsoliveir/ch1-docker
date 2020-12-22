@@ -12,27 +12,42 @@ spec:
         app: public-gateway
     spec:
       containers:
-      - name: public-gateway
-        image: nginx:alpine
-        imagePullPolicy: Always
-        volumeMounts:
-          - name: public-gateway-configmap
-            mountPath: "/etc/nginx/nginx.conf"
-            subPath: nginx.conf
-            readOnly: true
-          - name: public-gateway-configmap
-            mountPath: "/etc/nginx/credentials"
-            subPath: credentials
-            readOnly: true
-          - name: public-gateway-certificates
-            mountPath: "/etc/nginx/certificates"
-            readOnly: true
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "100m"
-        ports:
-        - containerPort: 80
+        - name: promtail
+          image:  grafana/promtail:1.6.1
+          volumeMounts:
+            - mountPath: /etc/promtail/config.yml
+              name: public-gateway-configmap
+              subPath: promtail-config.yml
+            - name: logs
+              mountPath: /var/log/nginx/
+              readOnly: true
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+        - name: public-gateway
+          image: nginx:alpine
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: public-gateway-configmap
+              mountPath: "/etc/nginx/nginx.conf"
+              subPath: nginx.conf
+              readOnly: true
+            - name: public-gateway-configmap
+              mountPath: "/etc/nginx/credentials"
+              subPath: credentials
+              readOnly: true
+            - name: public-gateway-certificates
+              mountPath: "/etc/nginx/certificates"
+              readOnly: true
+            - name: logs
+              mountPath: /var/log/nginx/
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+          ports:
+          - containerPort: 80
       volumes:
         - name: public-gateway-configmap
           configMap:
@@ -40,3 +55,5 @@ spec:
         - name: public-gateway-certificates
           secret:
             secretName: public-gateway-certificates
+        - name: logs
+          emptyDir: {}

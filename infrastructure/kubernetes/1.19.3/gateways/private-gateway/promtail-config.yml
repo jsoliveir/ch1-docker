@@ -1,0 +1,30 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+  
+clients:
+  - url: http://loki.monitoring:3100/loki/api/v1/push
+
+
+scrape_configs:
+- job_name: gateways
+  pipeline_stages:
+    - regex:
+        expression: (?P<Ip>.*)\s-\s(?P<User>.*?)\s\[(?P<Timestamp>.*)\]\s\"(?P<Verb>\w*?)\s(?P<Url>.*?)\s.*?\s(?P<StatusCode>.*?)\s(?P<Size>.*?)\s\"(?P<Referer>.*?)\".*?\"(?P<UserAgent>.*?.*?)\"
+    - labels:
+        Ip:
+        User:
+        Timestamp:
+        Verb:
+        Url:
+        StatusCode:
+        Size:
+        Referer:
+        UserAgent:
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      job: gateway
+      app: public-gateway
+      __path__: /var/log/nginx/access.log

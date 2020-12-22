@@ -12,6 +12,19 @@ spec:
         app: private-gateway
     spec:
       containers:
+      - name: promtail
+        image:  grafana/promtail:1.6.1
+        volumeMounts:
+            - mountPath: /etc/promtail/config.yml
+              name: private-gateway-configmap
+              subPath: promtail-config.yml
+            - name: logs
+              mountPath: /var/log/nginx/
+              readOnly: true
+        resources:
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
       - name: private-gateway
         image: nginx:alpine
         imagePullPolicy: Always
@@ -20,6 +33,8 @@ spec:
             mountPath: "/etc/nginx/nginx.conf"
             subPath: nginx.conf
             readOnly: true
+          - name: logs
+            mountPath: /var/log/nginx/
         resources:
           limits:
             memory: "128Mi"
@@ -30,3 +45,6 @@ spec:
         - name: private-gateway-configmap
           configMap:
             name: private-gateway-configmap
+        - name: logs
+          emptyDir: {}
+

@@ -18,3 +18,5 @@ configMapGenerator:
     files:
       - configs/nginx.conf
       - configs/credentials
+      - promtail-config.yml
+ 

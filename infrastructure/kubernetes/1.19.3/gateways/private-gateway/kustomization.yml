@@ -11,3 +11,4 @@ configMapGenerator:
   - name: private-gateway-configmap
     files:
       - configs/nginx.conf
+      - promtail-config.yml

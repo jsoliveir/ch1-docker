@@ -1,4 +1,4 @@
-# Proof of Concept
+# Challenge 
 
 This repository contains infrastructure configurations and services in order to achieve a solution for a subscriptions system regarding the following challenge requirements
 

@@ -1,11 +1,3 @@
-# Challenge 
-
-This repository contains infrastructure configurations and services in order to achieve a solution for a subscriptions system regarding the following challenge requirements
-
-[challenge.pdf](documentation/challenge.pdf)
-
-All APIs in this repository were written in dotnet core 3.1 using C#
-
 # What is in this repository
 
 - **[infrastructure/](infrastructure/)**	  

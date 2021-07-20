@@ -244,11 +244,11 @@ Docker hub was used as the main container registry for the purpose of this demo)
 - [https://hub.docker.com/r/jsoliveira/api-core-subscriptions/tags](https://hub.docker.com/r/jsoliveira/api-core-subscriptions/tags)
 - [https://hub.docker.com/r/jsoliveira/api-core-mail/tags](https://hub.docker.com/r/jsoliveira/api-core-mail/tags)
 
-##  CI/CD Bitbucket Pipelines
-[https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/](https://bitbucket.org/jsoliveira/iban-services-poc/addon/pipelines/home/)
+## Bitbucket Pipelines
+[Bitbucket Pipelines](bitbucket-pipelines.yml)
 
 ## CI/CD Azure DevOps
-[https://dev.azure.com/jsoliveir/Cloud%20POC/_build?definitionId=1](https://dev.azure.com/jsoliveir/Cloud%20POC/_build?definitionId=1)
+[Azure Devops](azure-pipelines.yml)
 
 
 # Cloud architecture

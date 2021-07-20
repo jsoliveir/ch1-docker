@@ -251,9 +251,7 @@ Docker hub was used as the main container registry for the purpose of this demo)
 [https://dev.azure.com/jsoliveir/Cloud%20POC/_build?definitionId=1](https://dev.azure.com/jsoliveir/Cloud%20POC/_build?definitionId=1)
 
 
-# Cloud architecture proposal (tiny version)
-
-The following drawing is tiny CI/CD architecture to deploy this solution into a Kubernetes cluster
+# Cloud architecture
 
 It was designed to be simple and cloud-provider agnostic
 

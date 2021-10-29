@@ -250,9 +250,3 @@ Docker hub was used as the main container registry for the purpose of this demo)
 ## CI/CD Azure DevOps
 [Azure Devops](azure-pipelines.yml)
 
-
-# Cloud architecture
-
-It was designed to be simple and cloud-provider agnostic
-
-![architecture](documentation/architecture.png)
